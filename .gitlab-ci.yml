@@ -24,7 +24,7 @@ lint_frontend:
   stage: lint
   script:
     - cd frontend && npm install -g eslint
-    - cd frontend && npm run lint
+    - npm run lint
   dependencies:
     - build_frontend
 
