@@ -1,5 +1,4 @@
-default:
-  image: node:latest
+image: node:latest
 
 stages:
   - init
@@ -21,10 +20,4 @@ build_frontend:
     paths:
       - frontend
 
-lint_frontend:
-  stage: lint
-  script:
-    - npm install eslint
-    - cd frontend && npm run lint
-  dependencies:
-    - build_frontend
+
