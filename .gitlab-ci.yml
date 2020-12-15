@@ -20,11 +20,4 @@ build_frontend:
     paths:
       - frontend
 
-lint_frontend:
-  stage: lint
-  script:
-    - cd frontend && npm install -g eslint
-    - npm run lint
-  dependencies:
-    - build_frontend
 
