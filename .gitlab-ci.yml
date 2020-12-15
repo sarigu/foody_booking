@@ -28,11 +28,3 @@ lint_frontend:
   dependencies:
     - build_frontend
 
-lint_backend:
-  stage: lint
-  script:
-    - npm install -g eslint
-    - cd backend && npm run lint
-  dependencies:
-    - build_backend
-
