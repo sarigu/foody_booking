@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Menu from '../pages/menu';
 import MenuRecommendation from '../pages/menuRecommendation';
+import RestaurantDestails from '../pages/restaurantDetails';
 
 class App extends React.Component {
 
@@ -40,6 +41,9 @@ class App extends React.Component {
             </Route>
             <Route path="/recommendation" exact>
               <MenuRecommendation />
+            </Route>
+            <Route path="/restaurantdetails" exact>
+              <RestaurantDestails />
             </Route>
           </Switch>
         </div>
