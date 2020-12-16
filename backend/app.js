@@ -4,6 +4,8 @@ const mysql = require('mysql');
 
 
 //  MIDDLEWARE
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Add Access Control Allow Origin headers
 app.use((req, res, next) => {
@@ -54,6 +56,18 @@ app.get("/restaurantdetails", (req, res) => {
         if (err) throw err;
         data = JSON.parse(JSON.stringify(result));
         return res.send({ data: data });
+    });
+});
+
+//update resturant data
+app.post("/restaurantdetails", async (req, res) => {
+    const { name, address, description, email, phone } = req.body;
+    var sql = "UPDATE Restaurant SET name = ?, address = ?, description = ?, email = ? , phone = ?  WHERE RestaurantID = 1";
+    con.query(sql, [name, address, description, email, phone], (error) => {
+        if (error) {
+            return res.status(500).send({ error });
+        }
+        return res.send({ message: "updated" });
     });
 });
 

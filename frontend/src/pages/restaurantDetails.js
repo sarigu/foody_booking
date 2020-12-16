@@ -32,7 +32,7 @@ export default class RestaurantDetails extends React.Component {
                     <div><span className="boldText">Email:</span> {Email}</div>
                     <div><span className="boldText">Phone:</span> {Phone}</div>
                 </div>
-                <Link>Update</Link>
+                <Link to="/updatedetails">Edit</Link>
             </div>
         );
 
