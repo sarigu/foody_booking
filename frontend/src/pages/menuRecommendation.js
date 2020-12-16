@@ -18,11 +18,16 @@ export default class MenuRecommendation extends React.Component {
         }
     }
 
+    refreshPage = () => {
+        window.location.reload();
+    }
+
     render() {
         return (
             <div>
                 <h1>Your surprise menu item</h1>
                 <MenuItem item={this.state.item} />
+                <button onClick={this.refreshPage}>Get a new surprise</button>
             </div>
         );
     }
