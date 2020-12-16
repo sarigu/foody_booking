@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 export default class MenuItem extends Component {
 
     render() {
-
         const { Item, Price, Description } = this.props.item;
 
         return (

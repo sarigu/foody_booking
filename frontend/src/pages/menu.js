@@ -4,7 +4,7 @@ import MenuItem from "../components/menuItem"
 export default class Menu extends React.Component {
     constructor() {
         super();
-        this.state = {};
+        this.state = { menuItems: [] };
     }
 
     componentDidMount = async () => {
