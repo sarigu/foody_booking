@@ -19,19 +19,3 @@ build_frontend:
   artifacts:
     paths:
       - frontend
-
-lint_backend:
-  stage: lint
-  script:
-    - npm install eslint
-    - cd backend && npm run lint
-  dependencies:
-    - build_backend
-
-lint_frontend:
-  stage: lint
-  script:
-    - npm install eslint
-    - cd frontend && npm run lint
-  dependencies:
-    - build_frontend
