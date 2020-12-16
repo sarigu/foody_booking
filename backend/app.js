@@ -30,12 +30,21 @@ const con = mysql.createConnection({
 //  FUNCTIONS 
 
 app.get("/menu", (req, res) => {
-    con.query("SELECT * FROM Menu", function (err, result, fields) {
+    con.query("SELECT * FROM Menu", function (err, result) {
         if (err) throw err;
         data = JSON.parse(JSON.stringify(result));
         return res.send({ data: data });
     });
 });
+
+app.get("/recommendation", (req, res) => {
+    con.query("SELECT * FROM Menu ORDER BY RAND() LIMIT 1", function (err, result) {
+        if (err) throw err;
+        data = JSON.parse(JSON.stringify(result));
+        return res.send({ data: data });
+    });
+});
+
 
 
 //  RUN SERVER

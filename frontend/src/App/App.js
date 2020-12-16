@@ -2,10 +2,7 @@ import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Menu from '../pages/menu';
-import UserStore from '../stores/UserStore';
-import LoginForm from '../components/LoginForm';
-import InputField from '../components/InputField';
-import SubmitButton from '../components/SubmitButton';
+import MenuRecommendation from '../pages/menuRecommendation';
 
 class App extends React.Component {
 
@@ -36,9 +33,13 @@ class App extends React.Component {
         <div>
           <Switch>
             <Route path="/" exact>
+              <h1>Hello</h1>
             </Route>
             <Route path="/menu" exact>
               <Menu />
+            </Route>
+            <Route path="/recommendation" exact>
+              <MenuRecommendation />
             </Route>
           </Switch>
         </div>
