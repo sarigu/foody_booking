@@ -14,11 +14,15 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router>
+      <div className="app"><Router>
         <div>
           <Switch>
             <Route path="/" exact>
-              <h1>Hello</h1>
+              <div className="flex">
+                <h1 className="welcome-heading">Hello You</h1>
+                <span className="emojis">&#128522;</span>
+                <span className="emojis">&#9995;</span>
+              </div>
               <Login />
             </Route>
             <Route path="/signup" exact>
@@ -41,7 +45,7 @@ class App extends React.Component {
             </Route>
           </Switch>
         </div>
-      </Router>
+      </Router></div>
     );
   }
 }
