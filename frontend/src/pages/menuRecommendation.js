@@ -1,5 +1,6 @@
 import React from 'react';
 import MenuItem from "../components/menuItem"
+import Navbar from "../components/NavBar";
 
 export default class MenuRecommendation extends React.Component {
     constructor() {
@@ -25,9 +26,11 @@ export default class MenuRecommendation extends React.Component {
     render() {
         return (
             <div>
-                <h1>Your surprise menu item</h1>
-                <MenuItem item={this.state.item} />
-                <button onClick={this.refreshPage}>Get a new surprise</button>
+                <Navbar />
+                <div className="main">
+                    <h1>Your surprise menu item</h1>
+                    <MenuItem item={this.state.item} />
+                    <button onClick={this.refreshPage}>Get a new surprise</button></div>
             </div>
         );
     }

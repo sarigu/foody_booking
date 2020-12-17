@@ -1,38 +1,67 @@
-.App {
-  text-align: center;
+.app{
+  background-color: #FFEAEA;
+  width:100vw;
+  height:100vh;
+  overflow: scroll;
+  margin: 0;
+
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.main{
+  padding:20px 150px 30px 150px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.flex{
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.emojis{
+  font-size: 40px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.welcome-heading{
+  font-size:50px;
+  padding-right:10px;
+}
+
+.logoutBtn{
+  float: right;
+  font-weight: bold;
+  padding:25px;
+  cursor: pointer;
+}
+
+nav{
+  height:70px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo{
+  background-image: url("../assets/logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width:200px;
+  height:50px;
+}
+
+.link-elem{
+  font-weight: bold;
+  font-size:21px;
+  text-decoration: none;
+  color:black;
+}
+
+.index-container{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.menu-container, .booking-container{
+  display:flex;
+  flex-direction: column;
 }
