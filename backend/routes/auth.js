@@ -2,6 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const mysql = require('mysql');
 
+//MYSQL CONNECTION
 
 const con = mysql.createConnection({
     host: "localhost",
@@ -11,8 +12,7 @@ const con = mysql.createConnection({
     port: "3306"
 });
 
-
-
+//FUNCTIONS
 // signup
 router.post('/signup', async (req, res) => {
     try {
