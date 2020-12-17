@@ -1,15 +1,13 @@
+import React, { Component } from 'react';
 
-import React from 'react';
-
-class LoginForm extends React.Component {
-
-  render() {
-  return (
-    <div className="loginForm">
-      <h1>Hello</h1>
-    
-    </div>
-  );
-}}
-
-export default LoginForm;
+export default class LoginForm extends Component {
+    render() {
+        return (
+            <form onSubmit={this.props.onLogin}>
+                <input type="email" name="email" placeholder="email" required></input>
+                <input type="password" name="password" placeholder="password" required></input>
+                <button>Login</button>
+            </form>
+        );
+    }
+}

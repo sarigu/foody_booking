@@ -25,7 +25,6 @@ export default class RestaurantForm extends React.Component {
             headers: { 'Content-Type': 'application/json' },
         });
 
-
         const data = await connection.json();
         console.log(data)
 

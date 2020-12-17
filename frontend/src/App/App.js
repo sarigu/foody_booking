@@ -4,30 +4,13 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Menu from '../pages/menu';
 import MenuRecommendation from '../pages/menuRecommendation';
 import RestaurantDetails from '../pages/restaurantDetails';
-import RestaurantForm from '../components/RestaurantForm'
+import RestaurantForm from '../components/RestaurantForm';
+import Login from '../pages/login';
+import SignUp from '../pages/SignUp';
+import Index from '../pages/index'
 
 class App extends React.Component {
 
-  async componentDidMount() {
-
-    try {
-
-      let res = await fetch('./isLoggedIn', {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json',
-          'Content-type': 'application/json'
-        }
-
-      })
-
-    }
-
-    catch (e) {
-      console.log(e)
-    }
-
-  }
 
   render() {
     return (
@@ -36,6 +19,13 @@ class App extends React.Component {
           <Switch>
             <Route path="/" exact>
               <h1>Hello</h1>
+              <Login />
+            </Route>
+            <Route path="/signup" exact>
+              <SignUp />
+            </Route>
+            <Route path="/index" exact>
+              <Index />
             </Route>
             <Route path="/menu" exact>
               <Menu />

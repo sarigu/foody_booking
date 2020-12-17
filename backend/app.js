@@ -1,11 +1,22 @@
 const express = require("express");
 const app = express();
 const mysql = require('mysql');
+const session = require('express-session');
+const rateLimiter = require("express-rate-limit");
+
+
+const authRoute = require("./routes/auth");
 
 
 //  MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(session({
+    secret: "sas546ddasd546asd34asd",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false },
+}))
 
 // Add Access Control Allow Origin headers
 app.use((req, res, next) => {
@@ -16,6 +27,18 @@ app.use((req, res, next) => {
     );
     next();
 });
+
+
+app.use(
+    "/auth/",
+    rateLimiter({
+        windowMs: 10 * 60 * 1000, // 10 minutes
+        max: 10,
+    })
+);
+
+app.use("/auth", authRoute);
+
 
 
 //  MYSQL CONNECTION
@@ -32,7 +55,7 @@ const con = mysql.createConnection({
 //  FUNCTIONS 
 
 
-//get menu
+//  get menu
 app.get("/menu", (req, res) => {
     con.query("SELECT * FROM Menu WHERE RestaurantID = 1", function (err, result) {
         if (err) throw err;
@@ -41,7 +64,7 @@ app.get("/menu", (req, res) => {
     });
 });
 
-//get one random menu item
+//  get one random menu item
 app.get("/recommendation", (req, res) => {
     con.query("SELECT * FROM Menu ORDER BY RAND() LIMIT 1", function (err, result) {
         if (err) throw err;
@@ -50,7 +73,7 @@ app.get("/recommendation", (req, res) => {
     });
 });
 
-//get resturant data
+//  get resturant data
 app.get("/restaurantdetails", (req, res) => {
     con.query("SELECT * FROM Restaurant", function (err, result) {
         if (err) throw err;
@@ -59,10 +82,10 @@ app.get("/restaurantdetails", (req, res) => {
     });
 });
 
-//update resturant data
+//  update resturant data
 app.post("/restaurantdetails", async (req, res) => {
     const { name, address, description, email, phone } = req.body;
-    var sql = "UPDATE Restaurant SET name = ?, address = ?, description = ?, email = ? , phone = ?  WHERE RestaurantID = 1";
+    const sql = "UPDATE Restaurant SET name = ?, address = ?, description = ?, email = ? , phone = ?  WHERE RestaurantID = 1";
     con.query(sql, [name, address, description, email, phone], (error) => {
         if (error) {
             return res.status(500).send({ error });
