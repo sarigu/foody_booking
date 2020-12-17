@@ -11,27 +11,6 @@ import Index from '../pages/index'
 
 class App extends React.Component {
 
-  constructor() {
-    super();
-
-    this.state = {
-      isAuthorized: "false",
-    }
-  }
-
-
-  componentDidMount = async () => {
-    try {
-      await fetch("http://localhost:8000/getsession", {
-      }).then(response =>
-        response.status === 200 ? this.setState({ isAuthorized: "true" }) : this.setState({ isAuthorized: "false" })
-      );
-      console.log(this.state.isAuthorized)
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
 
   render() {
     return (
@@ -46,7 +25,7 @@ class App extends React.Component {
               <SignUp />
             </Route>
             <Route path="/index" exact>
-              <Index isAuth={this.state.isAuthorized} />
+              <Index />
             </Route>
             <Route path="/menu" exact>
               <Menu />

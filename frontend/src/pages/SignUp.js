@@ -8,7 +8,7 @@ export default class SignUp extends Component {
         e.preventDefault();
         const { username, email, password } = e.target;
 
-        const connection = await fetch("http://localhost:8000/signup", {
+        await fetch("http://localhost:8000/auth/signup", {
             method: "POST",
             body: JSON.stringify({
                 username: username.value,
@@ -16,13 +16,9 @@ export default class SignUp extends Component {
                 password: password.value
             }),
             headers: { 'Content-Type': 'application/json' },
-        });
-
-        const data = await connection.json();
-        console.log(data)
-
-
-        window.location = '/';
+        }).then(response =>
+            response.status === 200 ? window.location = '/' : window.location = '/signup'
+        );
     }
 
     render() {

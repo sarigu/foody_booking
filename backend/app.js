@@ -1,8 +1,11 @@
 const express = require("express");
 const app = express();
 const mysql = require('mysql');
-const bcrypt = require("bcrypt");
 const session = require('express-session');
+const rateLimiter = require("express-rate-limit");
+
+
+const authRoute = require("./routes/auth");
 
 
 //  MIDDLEWARE
@@ -26,6 +29,18 @@ app.use((req, res, next) => {
 });
 
 
+app.use(
+    "/auth/",
+    rateLimiter({
+        windowMs: 10 * 60 * 1000, // 10 minutes
+        max: 10,
+    })
+);
+
+app.use("/auth", authRoute);
+
+
+
 //  MYSQL CONNECTION
 
 const con = mysql.createConnection({
@@ -39,68 +54,18 @@ const con = mysql.createConnection({
 
 //  FUNCTIONS 
 
-// --------signup
 
-app.post('/signup', async (req, res) => {
-    try {
-        const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+//  session
 
-        const sql = "INSERT INTO user (email, password, username) VALUES ( ?,  ?,  ?)";
-        await con.query(sql, [req.body.email, hashedPassword, req.body.username], function (err, result) {
-            if (err) {
-                res.status(500).send()
-            }
-        });
-
-    } catch{
-        res.status(500).send();
-    }
-})
-
-//-------- login
-app.post('/login', async (req, res) => {
-
-    const sql = "SELECT * FROM user WHERE email =  ?";
-    await con.query(sql, req.body.email, function (err, result) {
-        if (err) {
-            res.status(500).send()
-        }
-
-        data = JSON.parse(JSON.stringify(result));
-        user = data[0];
-
-        if (!user) {
-            return res.status(500).send({ error: "User does not exist. Try again." });
-        }
-
-        bcrypt.compare(req.body.password, user.password, (err, result) => {
-            if (result) {
-                req.session.username = user.username;
-                res.status(200).send("sucess");
-            } else {
-                res.status(401).send("not allowed");
-            }
-        });
-
-    })
-})
-
-
-// ----------- session
-
-app.get('/getsession', (req, res) => {
-    console.log("request");
-    console.log(req.session);
-    console.log(req.session.username);
+/*app.get('/getsession', (req, res) => {
     if (!req.session.username) {
         return res.status(401).send();
     }
     return res.status(200).send('Welcome to session with key');
-})
+})*/
 
 
-// ------- get menu
+//  get menu
 app.get("/menu", (req, res) => {
     con.query("SELECT * FROM Menu WHERE RestaurantID = 1", function (err, result) {
         if (err) throw err;
@@ -109,7 +74,7 @@ app.get("/menu", (req, res) => {
     });
 });
 
-// -------- get one random menu item
+//  get one random menu item
 app.get("/recommendation", (req, res) => {
     con.query("SELECT * FROM Menu ORDER BY RAND() LIMIT 1", function (err, result) {
         if (err) throw err;
@@ -118,7 +83,7 @@ app.get("/recommendation", (req, res) => {
     });
 });
 
-// -------- get resturant data
+//  get resturant data
 app.get("/restaurantdetails", (req, res) => {
     con.query("SELECT * FROM Restaurant", function (err, result) {
         if (err) throw err;
@@ -127,7 +92,7 @@ app.get("/restaurantdetails", (req, res) => {
     });
 });
 
-// -------- update resturant data
+//  update resturant data
 app.post("/restaurantdetails", async (req, res) => {
     const { name, address, description, email, phone } = req.body;
     const sql = "UPDATE Restaurant SET name = ?, address = ?, description = ?, email = ? , phone = ?  WHERE RestaurantID = 1";

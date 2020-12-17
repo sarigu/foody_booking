@@ -10,15 +10,13 @@ export default class Login extends Component {
         const { email, password } = e.target;
         const user = { email: email.value, password: password.value };
 
-        await fetch("http://localhost:8000/login", {
+        await fetch("http://localhost:8000/auth/login", {
             method: "POST",
             body: JSON.stringify(user),
             headers: { 'Content-Type': 'application/json' },
         }).then(response =>
             response.status === 200 ? window.location = '/index' : window.location = '/login'
         );
-
-
     }
 
     render() {
