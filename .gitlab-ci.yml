@@ -19,7 +19,6 @@ build_frontend:
   artifacts:
     paths:
       - frontend
-
 lint_backend:
   stage: lint
   script:

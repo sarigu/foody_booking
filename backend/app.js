@@ -152,7 +152,7 @@ app.get("/timeslot", (req, res) => {
     con.query("SELECT * FROM timeslot ORDER BY Date", function (err, result) {
         if (err) throw err;
         data = JSON.parse(JSON.stringify(result));
-        for (let val of data) {
+        for(let val of data) {
             console.log(val.Date)
         }
         return res.send({ data: data });
@@ -164,21 +164,21 @@ app.post("/timeslot", (req, res) => {
     con.query("SELECT * FROM timeslot ORDER BY Date", function (err, result) {
         if (err) throw err;
         data = JSON.parse(JSON.stringify(result));
-        for (let val of data) {
+        for(let val of data) {
             console.log(val.Date)
             if (val.date == request.body.Date) {
                 con.query("SELECT * FROM timeslot where Date = ?", val.date, function (err, result) {
                     datatime = JSON.parse(JSON.stringify(result));
-                    for (let slottime of datatime) {
-                        if (request.body.StartTime >= slottime.StartTime &&
+                    for(let slottime of datatime) {
+                        if( request.body.StartTime >= slottime.StartTime && 
                             request.body.StartTime < slottime.EndTime ||
                             request.body.EndTime > slottime.StartTime &&
                             request.body.EndTime < slottime.EndTime
                         ) { pass; } else {
-                            const sqlInsert = "INSERT INTO `timeslot` (`TimeSlotID`, `SeatID`, `Date`, `StartTime`, `EndTime`) VALUES (NULL, '4', '2020-12-02', '14:30', '20:30')";
-                            con.query(sqlInsert, function (err, result) {
-                                res.send("Data Instrted");
-                            });
+                                const sqlInsert = "INSERT INTO `timeslot` (`TimeSlotID`, `SeatID`, `Date`, `StartTime`, `EndTime`) VALUES (NULL, '4', '2020-12-02', '14:30', '20:30')";
+                                con.query(sqlInsert, function (err, result) {
+                                    res.send("Data Instrted");
+                                });                                
                         }
                     }
                 });
@@ -239,8 +239,9 @@ app.post("/bookingadd", (req, res) => {
     con.query("SELECT * FROM booking", function (err, result) {
         if (err) throw err;
         data = JSON.parse(JSON.stringify(result));
-        for (val in data) {
-            if (val.TimeSlotID == request.query.TimeSlotID) {
+        for (val in data){
+            if (val.TimeSlotID == request.query.TimeSlotID)
+            {
                 res.send("Already Booked");
             } else {
                 const sqlInsert = "INSERT INTO `booking` (`BookingID`, `TimeSlotID`, `UserID`, `Status`) VALUES (NULL, '1', '1', '1');";
@@ -290,10 +291,7 @@ app.post("/editbooking", (req, res) => {
     });
 });
 
-
-
 //  RUN SERVER
-
 const port = 8000;
 
 app.listen(port, () => {
