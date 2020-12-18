@@ -8,6 +8,9 @@ import RestaurantForm from '../components/RestaurantForm';
 import Login from '../pages/login';
 import SignUp from '../pages/SignUp';
 import Index from '../pages/index'
+import Seat from '../pages/seat';
+import TimeSlot from '../pages/timeslot';
+import Booking from '../pages/booking';
 
 class App extends React.Component {
 
@@ -42,6 +45,15 @@ class App extends React.Component {
             </Route>
             <Route path="/updatedetails" exact>
               <RestaurantForm />
+            </Route>
+            <Route path="/seat" exact>
+              <Seat />
+            </Route>
+            <Route path="/timeslot" exact>
+              <TimeSlot />
+            </Route>
+            <Route path="/booking" exact>
+              <Booking />
             </Route>
           </Switch>
         </div>
