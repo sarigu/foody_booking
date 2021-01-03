@@ -2,12 +2,12 @@ import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Menu from '../pages/Menu';
-import MenuRecommendation from '../pages/MenuRecommendation';
-import RestaurantDetails from '../pages/RestaurantDetails';
-import RestaurantForm from '../components/RestaurantForm';
-import Login from '../pages/Login';
-import SignUp from '../pages/SignUp';
-import Index from '../pages/Index';
+import MenuRecommendation from '../pages/MenuRecommendation.js';
+import RestaurantDetails from '../pages/RestaurantDetails.js';
+import RestaurantForm from '../components/RestaurantForm.js';
+import Login from '../pages/Login.js';
+import SignUp from '../pages/SignUp.js';
+import Index from '../pages/Index.js';
 
 class App extends React.Component {
   render() {

@@ -25,6 +25,7 @@ module.exports = {
         "no-unused-vars": "warn",
         "no-console": "off",
         "no-undef": "off",
+        "import/extensions": "warn",
         "object-shorthand": "off",
         "class-methods-use-this": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],

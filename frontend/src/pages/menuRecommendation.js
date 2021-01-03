@@ -1,6 +1,6 @@
 import React from 'react';
-import MenuItem from '../components/MenuItem';
-import Navbar from '../components/NavBar';
+import MenuItem from '../components/MenuItem.js';
+import Navbar from '../components/NavBar.js';
 
 export default class MenuRecommendation extends React.Component {
   constructor() {
