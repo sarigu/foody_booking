@@ -54,7 +54,6 @@ class App extends React.Component {
               <Route path="/booking" exact>
                 <Booking />
               </Route>
-
             </Switch>
           </div>
         </Router>
