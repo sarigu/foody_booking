@@ -1,6 +1,6 @@
 import React from 'react';
-import MenuItem from '../components/MenuItem.js';
-import Navbar from '../components/NavBar.js';
+import MenuItem from '../components/MenuItem';
+import Navbar from '../components/NavBar';
 
 export default class Menu extends React.Component {
   constructor() {

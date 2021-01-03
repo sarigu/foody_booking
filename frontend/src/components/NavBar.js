@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Logout from './Logout.js';
+import Logout from './Logout';
 
 export default class Navbar extends Component {
   render() {
