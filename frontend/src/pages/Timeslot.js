@@ -1,6 +1,5 @@
 import React from 'react';
 import TimeSlotPlan from '../components/Timeslotplan';
-// import SeatPlan from '../components/seatplan';
 
 export default class TimeSlot extends React.Component {
   /* constructor() {
