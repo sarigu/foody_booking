@@ -48,6 +48,8 @@ module.exports = {
         "prefer-template": "warn",
         "react/jsx-one-expression": "off",
         "react/jsx-one-expression-per-line": "off",
+        "import/extensions": "off",
+        "import/no-unresolved": "off",
 
     }
 };
