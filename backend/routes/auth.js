@@ -3,11 +3,12 @@ const bcrypt = require('bcrypt');
 const mysql = require('mysql');
 
 // MYSQL CONNECTION
+
 const con = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root_1234',
-  database: 'foody',
+  host: 'aws-foodyapp.cvolzzyzesis.us-east-1.rds.amazonaws.com',
+  user: 'admin',
+  password: 'AWSfoodyapp3',
+  database: 'Foody',
   port: '3306',
 });
 
@@ -44,7 +45,7 @@ router.post('/login', async (req, res) => {
 
     bcrypt.compare(req.body.password, user.password, (err, result) => {
       if (result) {
-        res.status(200).send('sucess');
+        res.status(200).send('success');
       } else {
         res.status(401).send('not allowed');
       }
@@ -54,7 +55,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/logout', (req, res) => {
   console.log('logout clicked');
-  return res.status(200).send('Session destroyed');
+  return res.status(200).send('sucess');
 });
 
 module.exports = router;
