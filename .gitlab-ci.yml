@@ -3,6 +3,7 @@ image: node:latest
 stages:
   - init
   - lint
+  - test
 
 build_backend:
   stage: init
@@ -19,6 +20,7 @@ build_frontend:
   artifacts:
     paths:
       - frontend
+
 lint_backend:
   stage: lint
   script:
@@ -34,3 +36,10 @@ lint_frontend:
     - cd frontend && npm run lint
   dependencies:
     - build_frontend
+
+test_backend:
+  stage: test
+  script:
+    - cd backend && npm test
+  dependencies:
+    - build_backend
