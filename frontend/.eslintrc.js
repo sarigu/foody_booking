@@ -46,6 +46,7 @@ module.exports = {
         "jsx-a11y/label-has-associated-control": "warn",
         "react/no-array-index-key": "warn",
         "prefer-template": "warn",
+        "linebreak-style": ["error", (process.platform === "win32" ? "windows" : "unix")],
         "react/jsx-one-expression": "off",
         "react/jsx-one-expression-per-line": "off",
     }
