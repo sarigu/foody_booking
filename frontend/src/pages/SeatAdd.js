@@ -46,7 +46,7 @@ export default class SeatAdd extends React.Component {
               setSeatStatus(e.target.value);
             }}
           />
-          <button onClick="{submitReview}">Submit</button>
+          <button>Submit</button>
         </div>
       </div>
     );
