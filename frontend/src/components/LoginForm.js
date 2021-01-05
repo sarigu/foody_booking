@@ -4,8 +4,10 @@ export default class LoginForm extends Component {
   render() {
     return (
       <form onSubmit={this.props.onLogin}>
-        <input type="email" name="email" placeholder="email" required />
-        <input type="password" name="password" placeholder="password" required />
+        <label htmlFor="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="email" required />
+        <label htmlFor="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="password" required />
         <button>Login</button>
       </form>
     );
