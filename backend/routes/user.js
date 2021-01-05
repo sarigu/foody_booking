@@ -3,17 +3,17 @@ const mysql = require('mysql');
 
 // MYSQL CONNECTION
 const con = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root_1234',
-  database: 'foody',
+  host: 'aws-foodyapp.cvolzzyzesis.us-east-1.rds.amazonaws.com',
+  user: 'admin',
+  password: 'AWSfoodyapp3',
+  database: 'Foody',
   port: '3306',
 });
 
 // FUNCTIONS
 //  get menu
 router.get('/menu', (req, res) => {
-  con.query('SELECT * FROM Menu WHERE RestaurantID = 1', (err, result) => {
+  con.query('SELECT * FROM menu WHERE RestaurantID = 1', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
     return res.send({ data });
@@ -22,7 +22,7 @@ router.get('/menu', (req, res) => {
 
 //  get one random menu item
 router.get('/recommendation', (req, res) => {
-  con.query('SELECT * FROM Menu ORDER BY RAND() LIMIT 1', (err, result) => {
+  con.query('SELECT * FROM menu ORDER BY RAND() LIMIT 1', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
     return res.send({ data });
@@ -31,7 +31,7 @@ router.get('/recommendation', (req, res) => {
 
 //  get resturant data
 router.get('/restaurantdetails', (req, res) => {
-  con.query('SELECT * FROM Restaurant', (err, result) => {
+  con.query('SELECT * FROM restaurant', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
     return res.send({ data });
@@ -43,7 +43,7 @@ router.post('/restaurantdetails', async (req, res) => {
   const {
     name, address, description, email, phone,
   } = req.body;
-  const sql = 'UPDATE Restaurant SET name = ?, address = ?, description = ?, email = ? , phone = ?  WHERE RestaurantID = 1';
+  const sql = 'UPDATE restaurant SET name = ?, address = ?, description = ?, email = ? , phone = ?  WHERE RestaurantID = 1';
   con.query(sql, [name, address, description, email, phone], (error) => {
     if (error) {
       return res.status(500).send({ error });
@@ -54,7 +54,7 @@ router.post('/restaurantdetails', async (req, res) => {
 
 // get Table
 router.get('/seat', (req, res) => {
-  con.query('SELECT * FROM Seat', (err, result) => {
+  con.query('SELECT * FROM seat', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
     return res.send({ data });
@@ -82,7 +82,7 @@ router.get('/deleteseat', (req, res) => {
 // Getting id for editing a Table Seat
 router.get('/edit', (req, res) => {
   // const sqlQuery = ("SELECT * FROM Seat WHERE SeatID = 1", req.query.id);
-  const sqlQuery = 'SELECT * FROM Seat WHERE SeatID = 1';
+  const sqlQuery = 'SELECT * FROM seat WHERE SeatID = 1';
   con.query(sqlQuery, (err, result) => {
     if (err) throw err;
     res.redirect('/edit');
@@ -127,9 +127,9 @@ router.post('/timeslot', (req, res) => {
           datatime = JSON.parse(JSON.stringify(result));
           for (const slottime of datatime) {
             if (request.body.StartTime >= slottime.StartTime
-                            && request.body.StartTime < slottime.EndTime
-                            || request.body.EndTime > slottime.StartTime
-                            && request.body.EndTime < slottime.EndTime
+              && request.body.StartTime < slottime.EndTime
+              || request.body.EndTime > slottime.StartTime
+              && request.body.EndTime < slottime.EndTime
             ) { pass; } else {
               const sqlInsert = "INSERT INTO `timeslot` (`TimeSlotID`, `SeatID`, `Date`, `StartTime`, `EndTime`) VALUES (NULL, '4', '2020-12-02', '14:30', '20:30')";
               con.query(sqlInsert, (err, result) => {
@@ -160,7 +160,7 @@ router.get('/deletetimeslot', (req, res) => {
 // Getting id for editing a TimeSlot
 router.get('/edittimeslot', (req, res) => {
   // const sqlQuery = ("SELECT * FROM Seat WHERE TimeSlotID = ?", req.query.id);
-  const sqlQuery = 'SELECT * FROM Seat WHERE TimeSlotID = 1';
+  const sqlQuery = 'SELECT * FROM seat WHERE TimeSlotID = 1';
   con.query(sqlQuery, (err, result) => {
     if (err) throw err;
     res.redirect('/edittimeslot');
@@ -225,7 +225,7 @@ router.get('/deletebooking', (req, res) => {
 // Getting id for editing a Booking
 router.get('/editbooking', (req, res) => {
   // const sqlQuery = ("SELECT * FROM Seat WHERE BookingID = ?", req.query.id);
-  const sqlQuery = 'SELECT * FROM Seat WHERE BookingID = 1';
+  const sqlQuery = 'SELECT * FROM seat WHERE BookingID = 1';
   con.query(sqlQuery, (err, result) => {
     if (err) throw err;
     res.redirect('/editbooking');
