@@ -5,7 +5,7 @@ const session = require('express-session');
 const rateLimiter = require('express-rate-limit');
 
 const authRoute = require('./routes/auth');
-const userRoute = require('./routes/user');
+const bookingRoute = require('./routes/booking');
 
 //  MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
@@ -43,7 +43,7 @@ app.use(
 );
 
 app.use('/auth', authRoute);
-app.use('/', userRoute);
+app.use('/', bookingRoute);
 
 //  RUN SERVER
 const port = 8000;
