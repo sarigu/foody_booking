@@ -49,5 +49,6 @@ module.exports = {
         "linebreak-style": ["error", (process.platform === "win32" ? "windows" : "unix")],
         "react/jsx-one-expression": "off",
         "react/jsx-one-expression-per-line": "off",
+        "no-shadow": "off",
     }
 };

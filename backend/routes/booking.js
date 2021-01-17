@@ -16,9 +16,44 @@ router.get('/menu', (req, res) => {
   con.query('SELECT * FROM menu WHERE RestaurantID = 1', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
+    console.log(data);
     return res.send({ data });
   });
 });
+
+//  add menu item
+router.post('/menu/items', (req, res) => {
+  try {
+    const sql = 'INSERT INTO menu (Item, Price, Description, RestaurantID) VALUES ( ?,  ?,  ?, ?)';
+    con.query(sql, [req.body.menuItem, req.body.price, req.body.description, 1], (err, result) => {
+      if (result) {
+        //res.status(200).send();
+        con.query('SELECT * FROM menu WHERE RestaurantID = 1', (err, result) => {
+          if (err) throw err;
+          data = JSON.parse(JSON.stringify(result));
+          return res.send({ data });
+        });
+      }
+    });
+  } catch {
+    res.status(500).send();
+  }
+});
+
+//  delete menu item
+router.get('/menu/items/:id', (req, res) => {
+  let id = req.params.id;
+
+  const sql = 'DELETE FROM menu WHERE MenuID = ?';
+
+  con.query(sql, [id], (err, result) => {
+    if (result) {
+      console.log("delete");
+      res.status(200).send();
+    }
+  });
+});
+
 
 //  get one random menu item
 router.get('/recommendation', (req, res) => {
@@ -38,7 +73,7 @@ router.get('/restaurantdetails', (req, res) => {
   });
 });
 
-//  update resturant data
+//  update restaurant data
 router.post('/restaurantdetails', async (req, res) => {
   const {
     name, address, description, email, phone,
