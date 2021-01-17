@@ -35,16 +35,3 @@ lint_frontend:
   dependencies:
     - build_frontend
 
-test_frontend:
-  stage: test
-  script:
-    - cd frontend && npm test
-  dependencies:
-    - build_frontend
-
-test_backend:
-  stage: test
-  script:
-    - cd backend && npm test
-  dependencies:
-    - build_backend
