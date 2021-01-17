@@ -3,7 +3,6 @@ image: node:latest
 stages:
   - init
   - lint
-  - test
 
 build_backend:
   stage: init
