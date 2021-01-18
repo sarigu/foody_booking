@@ -35,8 +35,25 @@ router.post('/menu/items', (req, res) => {
   }
 });
 
+//  update menu item
+router.post('/menu/item/', (req, res) => {
+  console.log(req.body)
+  const {
+    itemID, item, price, description
+  } = req.body;
+
+  const sql = 'UPDATE menu SET Item = ?, Price = ?, Description = ? WHERE MenuID = ?';
+  con.query(sql, [item, price, description, itemID], (error) => {
+    if (error) {
+      return res.status(500).send({ error });
+    }
+    return res.status(200).send();
+  });
+
+});
+
 //  delete menu item
-router.get('/menu/items/:id', (req, res) => {
+router.get('/menu/item/:id', (req, res) => {
   let id = req.params.id;
 
   const sql = 'DELETE FROM menu WHERE MenuID = ?';

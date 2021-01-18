@@ -21,7 +21,7 @@ export default class Menu extends React.Component {
     }
   }
 
-  handleNewMenuItem = async (e) => {
+  handleAddMenuItem = async (e) => {
     e.preventDefault();
     const { menuItem, price, description } = e.target;
 
@@ -36,12 +36,11 @@ export default class Menu extends React.Component {
     }).then((response) => (response.status === 200 ? window.location = '/editmenu' : window.location = '/editmenu'));
   }
 
-  handleDeleteItem = async (e) => {
+  handleDeleteMenuItem = async (e) => {
     const { id } = e.target;
 
     try {
-      const response = await fetch(`http://localhost:8000/menu/items/${id}`);
-      console.log(response);
+      const response = await fetch(`http://localhost:8000/menu/item/${id}`);
       if (response.status === 200) {
         window.location = '/editmenu';
       }
@@ -50,7 +49,7 @@ export default class Menu extends React.Component {
     }
   }
 
-  handleUpdateItem = async (e) => {
+  handleChangeToUpdateItem = async (e) => {
     const menuItemID = parseInt(e.target.id, 10);
     this.setState({ update: true, updateID: menuItemID });
   }
@@ -71,8 +70,8 @@ export default class Menu extends React.Component {
                 ) : (
                   <div key={`item${index}`}>
                     <MenuItem item={item} />
-                    <button id={`${item.MenuID}`} onClick={this.handleDeleteItem}>Remove</button>
-                    <button id={`${item.MenuID}`} onClick={this.handleUpdateItem}>Update</button>
+                    <button id={`${item.MenuID}`} onClick={this.handleDeleteMenuItem}>Remove</button>
+                    <button id={`${item.MenuID}`} onClick={this.handleChangeToUpdateItem}>Update</button>
                   </div>
                 )
 
@@ -81,7 +80,7 @@ export default class Menu extends React.Component {
           <br />
           <div>
             <h2>Add new menu items</h2>
-            <MenuItemForm onAddMenuItem={this.handleNewMenuItem} />
+            <MenuItemForm onAddMenuItem={this.handleAddMenuItem} />
           </div>
         </div>
       </div>
