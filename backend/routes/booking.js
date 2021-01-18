@@ -148,9 +148,8 @@ router.post('/edit', (req, res) => {
 });
 
 // get Timeslot
-router.get('/timeslot', (req, res) => {
-  //router.get('/timeslot/:date', (req, res) => {
-  //console.log(req.params.date);
+router.get('/timeslot/:date', (req, res) => {
+  console.log(req.params.date);
   con.query('SELECT * FROM timeslot ORDER BY Date', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));

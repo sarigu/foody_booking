@@ -11,7 +11,8 @@ export default class TimeslotsPage extends React.Component {
 
     handleTimeSlots = async (e) => {
       e.preventDefault();
-      fetch('http://localhost:8000/timeslot')
+      const date = e.target.date.value;
+      fetch(`http://localhost:8000/timeslot/${date}`)
         .then((res) => res.json())
         .then((data) => {
           this.setState({ timeslots: data });
