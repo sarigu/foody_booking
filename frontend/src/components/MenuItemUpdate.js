@@ -19,6 +19,11 @@ export default class MenuItemUpdate extends Component {
     }).then((response) => (response.status === 200 ? window.location = '/editmenu' : console.log('error')));
   };
 
+  handleLeaveUpdate = (e) => {
+    e.preventDefault();
+    window.location = '/editmenu';
+  }
+
   render() {
     const {
       Item, Price, Description, MenuID,
@@ -37,6 +42,7 @@ export default class MenuItemUpdate extends Component {
           <label htmlFor="description">Description</label>
           <input type="text" id="description" name="description" defaultValue={Description} />
           <button type="submit">Update</button>
+          <button onClick={this.handleLeaveUpdate}>Back</button>
         </form>
       </div>
     );

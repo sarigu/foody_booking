@@ -11,7 +11,11 @@ export default class Menu extends React.Component {
     this.state = { menuItems: [], update: false, updateID: '' };
   }
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
+    this.getMenu();
+  }
+
+  getMenu = async () => {
     try {
       const response = await fetch('http://localhost:8000/menu');
       const data = await response.json();
@@ -33,7 +37,9 @@ export default class Menu extends React.Component {
         description: description.value,
       }),
       headers: { 'Content-Type': 'application/json' },
-    }).then((response) => (response.status === 200 ? window.location = '/editmenu' : window.location = '/editmenu'));
+    }).then((response) => (console.log(response)));
+
+    this.getMenu();
   }
 
   handleDeleteMenuItem = async (e) => {
@@ -42,7 +48,7 @@ export default class Menu extends React.Component {
     try {
       const response = await fetch(`http://localhost:8000/menu/item/${id}`);
       if (response.status === 200) {
-        window.location = '/editmenu';
+        this.getMenu();
       }
     } catch (err) {
       console.log(err);
@@ -74,7 +80,6 @@ export default class Menu extends React.Component {
                     <button id={`${item.MenuID}`} onClick={this.handleChangeToUpdateItem}>Update</button>
                   </div>
                 )
-
             ))}
           </div>
           <br />
