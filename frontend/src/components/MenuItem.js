@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 export default class MenuItem extends Component {
   render() {
@@ -22,7 +21,3 @@ export default class MenuItem extends Component {
     );
   }
 }
-
-MenuItem.propTypes = {
-  item: PropTypes.object,
-};

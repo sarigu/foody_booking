@@ -16,7 +16,6 @@ router.get('/menu', (req, res) => {
   con.query('SELECT * FROM menu WHERE RestaurantID = 1', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
-    console.log(data);
     return res.send({ data });
   });
 });
@@ -74,7 +73,7 @@ router.get('/recommendation', (req, res) => {
   });
 });
 
-//  get resturant data
+//  get restaurant data
 router.get('/restaurantdetails', (req, res) => {
   con.query('SELECT * FROM restaurant', (err, result) => {
     if (err) throw err;
@@ -149,13 +148,12 @@ router.post('/edit', (req, res) => {
 });
 
 // get Timeslot
-router.get('/timeslot', (req, res) => {
+router.get('/timeslot/:date', (req, res) => {
+  console.log(req.params.date);
   con.query('SELECT * FROM timeslot ORDER BY Date', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
-    for (const val of data) {
-      console.log(val.Date);
-    }
+    console.log(data);
     return res.send({ data });
   });
 });

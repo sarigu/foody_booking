@@ -9,17 +9,22 @@ export default class MenuRecommendation extends React.Component {
   }
 
   componentDidMount = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/recommendation');
-      const data = await response.json();
-      this.setState({ item: data.data[0] });
-    } catch (e) {
-      console.log(e);
-    }
+    this.getRecommendation();
+  }
+
+  getRecommendation = () => {
+    fetch('http://localhost:8000/recommendation')
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ item: data.data[0] });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   refreshPage = () => {
-    window.location.reload();
+    this.getRecommendation();
   }
 
   render() {

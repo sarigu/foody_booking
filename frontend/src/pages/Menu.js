@@ -8,14 +8,15 @@ export default class Menu extends React.Component {
     this.state = { menuItems: [] };
   }
 
-  componentDidMount = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/menu');
-      const data = await response.json();
-      this.setState({ menuItems: data.data });
-    } catch (e) {
-      console.log(e);
-    }
+  componentDidMount = () => {
+    fetch('http://localhost:8000/menu')
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ menuItems: data.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   render() {
