@@ -37,9 +37,9 @@ router.post('/menu/items', (req, res) => {
 
 //  update menu item
 router.post('/menu/item/', (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const {
-    itemID, item, price, description
+    itemID, item, price, description,
   } = req.body;
 
   const sql = 'UPDATE menu SET Item = ?, Price = ?, Description = ? WHERE MenuID = ?';
@@ -49,23 +49,21 @@ router.post('/menu/item/', (req, res) => {
     }
     return res.status(200).send();
   });
-
 });
 
 //  delete menu item
 router.get('/menu/item/:id', (req, res) => {
-  let id = req.params.id;
+  const { id } = req.params;
 
   const sql = 'DELETE FROM menu WHERE MenuID = ?';
 
   con.query(sql, [id], (err, result) => {
     if (result) {
-      console.log("delete");
+      console.log('delete');
       res.status(200).send();
     }
   });
 });
-
 
 //  get one random menu item
 router.get('/recommendation', (req, res) => {
