@@ -46,6 +46,7 @@ router.post('/login', async (req, res) => {
     bcrypt.compare(req.body.password, user.password, (err, result) => {
       if (result) {
         res.status(200).send('success');
+        console.log('success');
       } else {
         res.status(401).send('not allowed');
       }

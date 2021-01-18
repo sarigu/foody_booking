@@ -11,6 +11,7 @@ import Index from '../pages/Index';
 import Seat from '../pages/Seat';
 import TimeSlot from '../pages/Timeslot';
 import Booking from '../pages/Booking';
+import MenuEditPage from '../pages/MenuEditPage';
 
 class App extends React.Component {
   render() {
@@ -38,6 +39,9 @@ class App extends React.Component {
               </Route>
               <Route path="/recommendation" exact>
                 <MenuRecommendation />
+              </Route>
+              <Route path="/editmenu" exact>
+                <MenuEditPage />
               </Route>
               <Route path="/restaurantdetails" exact>
                 <RestaurantDetails />

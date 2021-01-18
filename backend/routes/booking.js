@@ -16,7 +16,52 @@ router.get('/menu', (req, res) => {
   con.query('SELECT * FROM menu WHERE RestaurantID = 1', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
+    console.log(data);
     return res.send({ data });
+  });
+});
+
+//  add menu item
+router.post('/menu/items', (req, res) => {
+  try {
+    const sql = 'INSERT INTO menu (Item, Price, Description, RestaurantID) VALUES ( ?,  ?,  ?, ?)';
+    con.query(sql, [req.body.menuItem, req.body.price, req.body.description, 1], (err, result) => {
+      if (result) {
+        res.status(200).send();
+      }
+    });
+  } catch {
+    res.status(500).send();
+  }
+});
+
+//  update menu item
+router.post('/menu/item/', (req, res) => {
+  console.log(req.body);
+  const {
+    itemID, item, price, description,
+  } = req.body;
+
+  const sql = 'UPDATE menu SET Item = ?, Price = ?, Description = ? WHERE MenuID = ?';
+  con.query(sql, [item, price, description, itemID], (error) => {
+    if (error) {
+      return res.status(500).send({ error });
+    }
+    return res.status(200).send();
+  });
+});
+
+//  delete menu item
+router.get('/menu/item/:id', (req, res) => {
+  const { id } = req.params;
+
+  const sql = 'DELETE FROM menu WHERE MenuID = ?';
+
+  con.query(sql, [id], (err, result) => {
+    if (result) {
+      console.log('delete');
+      res.status(200).send();
+    }
   });
 });
 
@@ -38,7 +83,7 @@ router.get('/restaurantdetails', (req, res) => {
   });
 });
 
-//  update resturant data
+//  update restaurant data
 router.post('/restaurantdetails', async (req, res) => {
   const {
     name, address, description, email, phone,

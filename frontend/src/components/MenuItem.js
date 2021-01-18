@@ -12,10 +12,10 @@ export default class MenuItem extends Component {
         </div>
         <div>
           <span className="boldText">Price: </span>
-          {Price}
+          {Price} DK
         </div>
         <div>
-          <span className="boldText">Description:</span>
+          <span className="boldText">Description: </span>
           {Description}
         </div>
       </div>

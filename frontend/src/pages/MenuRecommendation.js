@@ -13,7 +13,6 @@ export default class MenuRecommendation extends React.Component {
       const response = await fetch('http://localhost:8000/recommendation');
       const data = await response.json();
       this.setState({ item: data.data[0] });
-      console.log(this.state.item);
     } catch (e) {
       console.log(e);
     }
