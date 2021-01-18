@@ -5,7 +5,7 @@ export default class Navbar extends Component {
   render() {
     return (
       <nav>
-        <div className="logo" />
+        <a href="http://localhost:3000/index"><div className="logo" /></a>
         <Logout />
       </nav>
     );
