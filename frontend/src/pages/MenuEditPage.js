@@ -1,5 +1,4 @@
 import React from 'react';
-import ls from 'local-storage';
 import MenuItem from '../components/MenuItem';
 import MenuItemForm from '../components/MenuItemForm';
 import Navbar from '../components/NavBar';

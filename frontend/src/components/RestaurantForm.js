@@ -7,14 +7,15 @@ export default class RestaurantForm extends React.Component {
     this.state = { restaurantData: {} };
   }
 
-  componentDidMount = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/restaurantdetails');
-      const data = await response.json();
-      this.setState({ restaurantData: data.data[0] });
-    } catch (e) {
-      console.log(e);
-    }
+  componentDidMount = () => {
+    fetch('http://localhost:8000/restaurantdetails')
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ restaurantData: data.data[0] });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   handleDetailsUpdate = async (e) => {

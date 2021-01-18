@@ -9,13 +9,14 @@ export default class RestaurantDetails extends React.Component {
   }
 
   componentDidMount = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/restaurantdetails');
-      const data = await response.json();
-      this.setState({ restaurantData: data.data[0] });
-    } catch (e) {
-      console.log(e);
-    }
+    fetch('http://localhost:8000/restaurantdetails')
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ restaurantData: data.data[0] });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   render() {
