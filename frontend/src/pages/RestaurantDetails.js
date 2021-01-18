@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../components/NavBar';
 
 export default class RestaurantDetails extends React.Component {
   constructor() {
@@ -7,23 +8,25 @@ export default class RestaurantDetails extends React.Component {
     this.state = { restaurantData: {} };
   }
 
-    componentDidMount = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/restaurantdetails');
-        const data = await response.json();
-        this.setState({ restaurantData: data.data[0] });
-      } catch (e) {
-        console.log(e);
-      }
+  componentDidMount = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/restaurantdetails');
+      const data = await response.json();
+      this.setState({ restaurantData: data.data[0] });
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    render() {
-      const {
-        Name, Description, Address, Email, Phone,
-      } = this.state.restaurantData;
+  render() {
+    const {
+      Name, Description, Address, Email, Phone,
+    } = this.state.restaurantData;
 
-      return (
-        <div>
+    return (
+      <div>
+        <Navbar />
+        <div className="main">
           <h1>Restaurant Details</h1>
           <div>
             <div>
@@ -49,6 +52,7 @@ export default class RestaurantDetails extends React.Component {
           </div>
           <Link to="/updatedetails">Edit</Link>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 }
