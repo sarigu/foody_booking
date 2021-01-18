@@ -27,12 +27,7 @@ router.post('/menu/items', (req, res) => {
     const sql = 'INSERT INTO menu (Item, Price, Description, RestaurantID) VALUES ( ?,  ?,  ?, ?)';
     con.query(sql, [req.body.menuItem, req.body.price, req.body.description, 1], (err, result) => {
       if (result) {
-        //res.status(200).send();
-        con.query('SELECT * FROM menu WHERE RestaurantID = 1', (err, result) => {
-          if (err) throw err;
-          data = JSON.parse(JSON.stringify(result));
-          return res.send({ data });
-        });
+        res.status(200).send();
       }
     });
   } catch {
