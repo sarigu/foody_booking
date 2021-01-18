@@ -47,7 +47,7 @@ class App extends React.Component {
               <Route path="/updatedetails" exact>
                 <RestaurantForm />
               </Route>
-              <Route path="/booking/time" exact>
+              <Route path="/booking" exact>
                 <TimeslotsPage />
               </Route>
             </Switch>
