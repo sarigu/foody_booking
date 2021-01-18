@@ -51,5 +51,6 @@ module.exports = {
         "react/jsx-one-expression-per-line": "off",
         "no-shadow": "off",
         "no-nested-ternary": "off",
+        "jsx-a11y/control-has-associated-label": "off",
     }
 };
