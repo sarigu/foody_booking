@@ -15,11 +15,7 @@ export default class TimeslotsPage extends React.Component {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        if (data.message) {
-          this.setState({ timeslots: [] });
-        } else {
-          this.setState({ timeslots: data });
-        }
+        this.setState({ timeslots: data });
       })
       .catch((err) => {
         console.log(err);
@@ -39,7 +35,6 @@ export default class TimeslotsPage extends React.Component {
             {this.state.timeslots && this.state.timeslots.map((timeslot, index) => (
               <Timeslot key={`timeslot${index}`} item={timeslot} />
             ))}
-            <p>No available timeslots</p>
           </div>
         </div>
       </div>

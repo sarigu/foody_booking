@@ -19,16 +19,10 @@ export default class TablesPage extends React.Component {
     fetch(`http://localhost:8000/tables/${groupsize}/${timeslotID}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.message) {
-          console.log(data.message);
-          this.setState({
-            groupsize: groupsize, date: date, startTime: startTime, endTime: endTime,
-          });
-        } else {
-          this.setState({
-            tables: data.data, groupsize: groupsize, date: date, startTime: startTime, endTime: endTime,
-          });
-        }
+        console.log(data);
+        this.setState({
+          tables: data, groupsize: groupsize, date: date, startTime: startTime, endTime: endTime,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -54,7 +48,6 @@ export default class TablesPage extends React.Component {
               {this.state.tables && this.state.tables.map((table, index) => (
                 <Table key={`table${index}`} item={table} />
               ))}
-              <h3>No available tables</h3>
             </div>
           </div>
         </div>

@@ -113,9 +113,12 @@ router.get('/timeslots/:date', (req, res) => {
 // get available tables
 router.get('/tables/:groupsize/:timeslotID', (req, res) => {
   const { groupsize, timeslotID } = req.params;
+  console.log(timeslotID);
+  console.log(groupsize);
   const sql = 'SELECT * FROM tables WHERE TableStatus = 0 AND TimeslotID = ? AND Capacity >= ?';
-  con.query(sql, [groupsize, timeslotID], (err, result) => {
+  con.query(sql, [timeslotID, groupsize], (err, result) => {
     if (err) throw err;
+    console.log(result);
     if (result.length > 0) {
       data = JSON.parse(JSON.stringify(result));
       return res.send(data);

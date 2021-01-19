@@ -13,7 +13,6 @@ export default class Table extends Component {
     } = this.props.item;
 
     return (
-
       <div>
         <h2>Table {TableID}</h2>
         <div>For:  {Capacity} people</div>
