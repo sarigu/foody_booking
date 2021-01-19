@@ -10,6 +10,10 @@ import SignUp from '../pages/SignUp';
 import Index from '../pages/Index';
 import MenuEditPage from '../pages/MenuEditPage';
 import TimeslotsPage from '../pages/TimeslotsPage';
+import TablesPage from '../pages/TablesPage';
+import DatePage from '../pages/DatePage';
+import GroupsizePage from '../pages/GroupsizePage';
+import ConfirmBookingPage from '../pages/ConfirmBookingPage';
 
 class App extends React.Component {
   render() {
@@ -47,8 +51,20 @@ class App extends React.Component {
               <Route path="/updatedetails" exact>
                 <RestaurantForm />
               </Route>
+              <Route path="/booking/date" exact>
+                <DatePage />
+              </Route>
               <Route path="/booking/time" exact>
                 <TimeslotsPage />
+              </Route>
+              <Route path="/booking/groupsize" exact>
+                <GroupsizePage />
+              </Route>
+              <Route path="/booking/tables" exact>
+                <TablesPage />
+              </Route>
+              <Route path="/booking/confirm" exact>
+                <ConfirmBookingPage />
               </Route>
             </Switch>
           </div>
