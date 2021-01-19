@@ -20,17 +20,5 @@ build_frontend:
     paths:
       - frontend
 
-lint_backend:
-  stage: lint
-  script:
-    - cd backend && npm run lint
-  dependencies:
-    - build_backend
 
-lint_frontend:
-  stage: lint
-  script:
-    - cd frontend && npm run lint
-  dependencies:
-    - build_frontend
 
