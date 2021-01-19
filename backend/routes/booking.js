@@ -96,6 +96,31 @@ router.post('/restaurantdetails', async (req, res) => {
   });
 });
 
+// get Timeslots
+router.get('/timeslots/:date', (req, res) => {
+  console.log(req.params.date);
+  con.query('SELECT * FROM timeslot ORDER BY Date', (err, result) => {
+    if (err) throw err;
+    data = JSON.parse(JSON.stringify(result));
+    return res.send(data);
+  });
+});
+
+//get available tables 
+router.get('/tables/:groupsize', (req, res) => {
+  const groupsize = req.params.groupsize;
+  console.log(groupsize);
+  const sql = 'SELECT * FROM tables WHERE TableStatus = 0 AND TimeslotID = 2 AND Capacity >= ?';
+  con.query(sql, [groupsize], (err, result) => {
+    if (err) throw err;
+    data = JSON.parse(JSON.stringify(result));
+    return res.send({ data });
+  });
+});
+
+
+//        ---------------------------------------
+
 // get Table
 router.get('/seat', (req, res) => {
   con.query('SELECT * FROM seat', (err, result) => {
@@ -147,15 +172,7 @@ router.post('/edit', (req, res) => {
   });
 });
 
-// get Timeslot
-router.get('/timeslot/:date', (req, res) => {
-  console.log(req.params.date);
-  con.query('SELECT * FROM timeslot ORDER BY Date', (err, result) => {
-    if (err) throw err;
-    data = JSON.parse(JSON.stringify(result));
-    return res.send(data);
-  });
-});
+
 
 // Add Timeslot
 router.post('/timeslot', (req, res) => {

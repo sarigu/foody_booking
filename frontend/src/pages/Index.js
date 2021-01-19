@@ -19,7 +19,7 @@ export default class Index extends Component {
                 <h2>Do you want to book a table? </h2>
                 <span className="emojis">&#127869;</span>
               </div>
-              <Link to="/booking" className="link-elem">Find vacant tables</Link>
+              <Link to="/booking/time" className="link-elem">Find vacant tables</Link>
             </div>
             <div className="menu-container">
               <div className="flex">

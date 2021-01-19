@@ -5,6 +5,7 @@ export default class Timeslot extends Component {
     const timeslotID = e.target.id;
     console.log('efe' + timeslotID);
     localStorage.setItem('timeslotID', timeslotID);
+    window.location = '/booking/tables'
   }
 
   handleCheck = () => {
@@ -14,19 +15,17 @@ export default class Timeslot extends Component {
 
   render() {
     const {
-      TimeSlotID, Date, SeatID, StartTime, EndTime,
+      TimeSlotID, Date, StartTime, EndTime,
     } = this.props.item;
 
     return (
       <div>
         <h2>Timeslot</h2>
-        {Date}
+        Date: {Date}
         <br />
-        {SeatID}
+        Start time: {StartTime}
         <br />
-        {StartTime}
-        <br />
-        {EndTime}
+        End time: {EndTime}
         <br />
         <button id={TimeSlotID} onClick={this.handleChosenTimeslot}>Pick</button>
         <button onClick={this.handleCheck}>Check</button>
