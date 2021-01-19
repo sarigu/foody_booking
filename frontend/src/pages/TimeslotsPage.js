@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import Timeslot from '../components/Timeslot';
-import DateForm from '../components/DateForm';
 
 export default class TimeslotsPage extends React.Component {
   constructor() {
@@ -9,10 +9,8 @@ export default class TimeslotsPage extends React.Component {
     this.state = { timeslots: [] };
   }
 
-  handleTimeSlots = async (e) => {
-    e.preventDefault();
-    const date = e.target.date.value;
-    localStorage.setItem('date', date);
+  componentDidMount = async () => {
+    const date = localStorage.getItem('date');
     fetch(`http://localhost:8000/timeslots/${date}`)
       .then((res) => res.json())
       .then((data) => {
@@ -28,8 +26,10 @@ export default class TimeslotsPage extends React.Component {
       <div>
         <Navbar />
         <div className="main">
-          <h2>Choose a date and see available times</h2>
-          <DateForm onSelectedDate={this.handleTimeSlots} />
+          <div>
+            <Link to="/booking/date">Date</Link>
+          </div>
+          <h2>Choose a time</h2>
           <div>
             {this.state.timeslots && this.state.timeslots.map((timeslot, index) => (
               <Timeslot key={`timeslot${index}`} item={timeslot} />

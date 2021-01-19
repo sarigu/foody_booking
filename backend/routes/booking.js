@@ -106,9 +106,9 @@ router.get('/timeslots/:date', (req, res) => {
   });
 });
 
-//get available tables 
+// get available tables
 router.get('/tables/:groupsize', (req, res) => {
-  const groupsize = req.params.groupsize;
+  const { groupsize } = req.params;
   console.log(groupsize);
   const sql = 'SELECT * FROM tables WHERE TableStatus = 0 AND TimeslotID = 2 AND Capacity >= ?';
   con.query(sql, [groupsize], (err, result) => {
@@ -117,7 +117,6 @@ router.get('/tables/:groupsize', (req, res) => {
     return res.send({ data });
   });
 });
-
 
 //        ---------------------------------------
 
@@ -171,8 +170,6 @@ router.post('/edit', (req, res) => {
     res.redirect('/seat');
   });
 });
-
-
 
 // Add Timeslot
 router.post('/timeslot', (req, res) => {
