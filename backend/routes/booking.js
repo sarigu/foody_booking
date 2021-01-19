@@ -98,23 +98,29 @@ router.post('/restaurantdetails', async (req, res) => {
 
 // get Timeslots
 router.get('/timeslots/:date', (req, res) => {
-  console.log(req.params.date);
-  con.query('SELECT * FROM timeslot ORDER BY Date', (err, result) => {
+  const { date } = req.params;
+  const sql = 'SELECT * FROM timeslot WHERE Date = ? ORDER BY Date';
+  con.query(sql, [date], (err, result) => {
     if (err) throw err;
-    data = JSON.parse(JSON.stringify(result));
-    return res.send(data);
+    if (result.length > 0) {
+      data = JSON.parse(JSON.stringify(result));
+      return res.send(data);
+    }
+    res.send({ message: 'no entries' });
   });
 });
 
 // get available tables
-router.get('/tables/:groupsize', (req, res) => {
-  const { groupsize } = req.params;
-  console.log(groupsize);
-  const sql = 'SELECT * FROM tables WHERE TableStatus = 0 AND TimeslotID = 2 AND Capacity >= ?';
-  con.query(sql, [groupsize], (err, result) => {
+router.get('/tables/:groupsize/:timeslotID', (req, res) => {
+  const { groupsize, timeslotID } = req.params;
+  const sql = 'SELECT * FROM tables WHERE TableStatus = 0 AND TimeslotID = ? AND Capacity >= ?';
+  con.query(sql, [groupsize, timeslotID], (err, result) => {
     if (err) throw err;
-    data = JSON.parse(JSON.stringify(result));
-    return res.send({ data });
+    if (result.length > 0) {
+      data = JSON.parse(JSON.stringify(result));
+      return res.send(data);
+    }
+    res.send({ message: 'no entries' });
   });
 });
 
@@ -246,26 +252,37 @@ router.get('/booking', (req, res) => {
   });
 });
 
-// Add Booking
+// -------------------  Add Booking
 router.post('/bookingadd', (req, res) => {
-  con.query('SELECT * FROM booking', (err, result) => {
+  const { timeslotID } = req.body;
+  const { userID } = req.body;
+  const { tableID } = req.body;
+  console.log('make booking');
+  console.log(userID);
+  const sql = 'INSERT INTO `booking` (`TimeSlotID`, `UserID`, `TableID`,`BookingStatus`) VALUES ( ? , ?, ?, 1)';
+  con.query(sql, [timeslotID, userID, tableID], (err, result) => {
+    if (err) throw err;
+    res.send({ message: 'Booking Added' });
+  });
+
+  /* con.query('SELECT * FROM booking', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
+    console.log(data);
     for (val in data) {
-      if (val.TimeSlotID == request.query.TimeSlotID) {
-        res.send('Already Booked');
+      console.log(val.TimeSlotID)
+      if (val.TimeSlotID === timeslotID) {
+        console.log("booked");
+        res.send({ message: 'already booked' });
       } else {
-        const sqlInsert = "INSERT INTO `booking` (`BookingID`, `TimeSlotID`, `UserID`, `Status`) VALUES (NULL, '1', '1', '1');";
-        con.query(sqlInsert, (err, result) => {
-          res.send('Booking Added');
+        console.log("for real");
+        const sql = 'INSERT INTO `booking` (`TimeSlotID`, `UserID`, `TableID`,`BookingStatus`) VALUES ( ? , ?, ?, 1)';
+        con.query(sql, [timeslotID, userID, tableID], (err, result) => {
+          res.send({ message: 'Booking Added' });
         });
       }
     }
-  });
-  // const sqlInsert = "INSERT INTO `booking` (`BookingID`, `TimeSlotID`, `UserID`, `Status`) VALUES (NULL, '1', '1', '1');";
-  // con.query(sqlInsert, function (err, result) {
-  //     res.send("Data Instrted");
-  // });
+  }); */
 });
 
 // Delete a Booking

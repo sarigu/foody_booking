@@ -6,7 +6,7 @@ import Timeslot from '../components/Timeslot';
 export default class TimeslotsPage extends React.Component {
   constructor() {
     super();
-    this.state = { timeslots: [] };
+    this.state = {};
   }
 
   componentDidMount = async () => {
@@ -14,7 +14,12 @@ export default class TimeslotsPage extends React.Component {
     fetch(`http://localhost:8000/timeslots/${date}`)
       .then((res) => res.json())
       .then((data) => {
-        this.setState({ timeslots: data });
+        console.log(data);
+        if (data.message) {
+          this.setState({ timeslots: [] });
+        } else {
+          this.setState({ timeslots: data });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -34,6 +39,7 @@ export default class TimeslotsPage extends React.Component {
             {this.state.timeslots && this.state.timeslots.map((timeslot, index) => (
               <Timeslot key={`timeslot${index}`} item={timeslot} />
             ))}
+            <p>No available timeslots</p>
           </div>
         </div>
       </div>

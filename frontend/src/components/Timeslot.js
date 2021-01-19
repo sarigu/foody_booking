@@ -3,8 +3,12 @@ import React, { Component } from 'react';
 export default class Timeslot extends Component {
   handleChosenTimeslot = (e) => {
     e.preventDefault();
-    const timeslotID = e.target.id;
+    const timeslotID = e.target.getAttribute('data-id');
+    const timeslotStart = e.target.getAttribute('data-start');
+    const timeslotEnd = e.target.getAttribute('data-end');
     localStorage.setItem('timeslotID', timeslotID);
+    localStorage.setItem('timeslotStart', timeslotStart);
+    localStorage.setItem('timeslotEnd', timeslotEnd);
     window.location = '/booking/groupsize';
   }
 
@@ -23,7 +27,7 @@ export default class Timeslot extends Component {
         <br />
         End time: {EndTime}
         <br />
-        <button id={TimeSlotID} onClick={this.handleChosenTimeslot}>Pick</button>
+        <button data-id={TimeSlotID} data-start={StartTime} data-end={EndTime} onClick={this.handleChosenTimeslot}>Pick</button>
       </div>
 
     );

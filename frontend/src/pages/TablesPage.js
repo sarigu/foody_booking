@@ -10,14 +10,25 @@ export default class TablesPage extends React.Component {
   }
 
   componentDidMount = async () => {
-    // const timeslotID = localStorage.getItem('timeslotID');
     const date = localStorage.getItem('date');
+    const timeslotID = localStorage.getItem('timeslotID');
     const groupsize = localStorage.getItem('groupsize');
+    const startTime = localStorage.getItem('timeslotStart');
+    const endTime = localStorage.getItem('timeslotEnd');
 
-    fetch(`http://localhost:8000/tables/${groupsize}`)
+    fetch(`http://localhost:8000/tables/${groupsize}/${timeslotID}`)
       .then((res) => res.json())
       .then((data) => {
-        this.setState({ tables: data.data, groupsize: groupsize, date: date });
+        if (data.message) {
+          console.log(data.message);
+          this.setState({
+            groupsize: groupsize, date: date, startTime: startTime, endTime: endTime,
+          });
+        } else {
+          this.setState({
+            tables: data.data, groupsize: groupsize, date: date, startTime: startTime, endTime: endTime,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -38,11 +49,12 @@ export default class TablesPage extends React.Component {
             <h2>Available Tables</h2>
             <div>For {this.state.groupsize} people</div>
             <div>On  {this.state.date} </div>
-            <div>Between  and  </div>
+            <div>Between {this.state.startTime} and {this.state.endTime}  </div>
             <div>
               {this.state.tables && this.state.tables.map((table, index) => (
                 <Table key={`table${index}`} item={table} />
               ))}
+              <h3>No available tables</h3>
             </div>
           </div>
         </div>
