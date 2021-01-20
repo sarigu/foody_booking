@@ -15,7 +15,7 @@ const con = mysql.createConnection({
   port: '3306',
 });
 
-//Functions
+// FUNCTIONS
 
 function checkUser(email, res) {
   const sql = `SELECT * FROM user WHERE email=?`;
@@ -80,6 +80,7 @@ router.post('/login', (req, res) => {
         auth = false;
         res.status(500).send({ error: "User does not exist. Try again." });
       }
+      return res.status(200).send();
     });
   }
 });
@@ -110,10 +111,24 @@ router.get('/is_user', (req, res) => {
   });
 });
 
+router.get("/setsession", (req, res) => {
+  console.log("set");
+  req.session.secretMessage = "secret message oder so";
+  return res.send({ data: req.session });
+});
+
+
 router.get('/logout', (req, res) => {
   console.log('logout clicked');
   auth = false;
   return res.status(200).send('sucess');
+});
+
+router.get("/getsession", (req, res) => {
+  console.log("get");
+  console.log(req.session);
+  //console.log(req.session.secretMessage);
+  return res.send({ data: req.session });
 });
 
 module.exports = router;
