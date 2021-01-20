@@ -10,8 +10,7 @@ export default class TimeslotsPage extends React.Component {
   }
 
   componentDidMount = async () => {
-    const date = localStorage.getItem('date');
-    fetch(`http://localhost:8000/timeslots/${date}`)
+    fetch('http://localhost:8000/timeslots')
       .then((res) => res.json())
       .then((data) => {
         console.log(data);

@@ -1,31 +1,23 @@
 const express = require('express');
-
 const app = express();
-const session = require('express-session');
+//const session = require('express-session');
 const rateLimiter = require('express-rate-limit');
+const cors = require('cors')
 
 const authRoute = require('./routes/auth');
 const bookingRoute = require('./routes/booking');
 
 //  MIDDLEWARE
+app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(session({
+/*app.use(session({
   secret: 'sas546ddasd546asd34asd',
   resave: false,
   saveUninitialized: false,
   cookie: { secure: false },
-}));
+}));*/
 
-// Add Access Control Allow Origin headers
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept',
-  );
-  next();
-});
 
 app.use(
   rateLimiter({
@@ -38,7 +30,7 @@ app.use(
   '/auth/',
   rateLimiter({
     windowMs: 10 * 60 * 1000, // 10 minutes
-    max: 10,
+    max: 30,
   }),
 );
 

@@ -14,15 +14,13 @@ export default class Timeslot extends Component {
 
   render() {
     const {
-      TimeSlotID, Date, StartTime, EndTime,
+      TimeSlotID, StartTime, EndTime,
     } = this.props.item;
 
     return (
 
       <div>
         <h2>Timeslot</h2>
-        Date: {Date}
-        <br />
         Start time: {StartTime}
         <br />
         End time: {EndTime}

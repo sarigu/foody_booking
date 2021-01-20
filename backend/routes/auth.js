@@ -2,6 +2,9 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const mysql = require('mysql');
 
+var auth = false;
+var usertype = '';
+
 // MYSQL CONNECTION
 
 const con = mysql.createConnection({
@@ -25,6 +28,16 @@ function checkUser(email, res) {
     }
   });
 }
+
+//backend middleware
+function isAuth(req, res, next) {
+  if (auth !== true) {
+    return res.status(401).json({ message: 'Not auth' });
+  }
+  next();
+};
+
+//Routes
 
 router.post('/signup', async (req, res) => {
   checkUser(req.body.email, res);
@@ -50,19 +63,52 @@ router.post('/login', (req, res) => {
   if (email && password) {
     con.query(sql, [email], (error, results) => {
       if (error) throw error;
-      const [user] = results;
+      var [user] = results;
       if (user) {
         bcrypt.compare(password, user.password, (err, result) => {
+          console.log(result);
           if (!result) {
-            return res.status(500).send({ error: "Password. Try again." });
+            auth = false;
+            res.status(500).send({ error: "Password wrong. Try again." });
+          } else {
+            auth = true;
+            usertype = user.usertype;
+            res.status(200).send()
           }
         });
       } else {
-        return res.status(500).send({ error: "User does not exist. Try again." });
+        auth = false;
+        res.status(500).send({ error: "User does not exist. Try again." });
       }
       return res.status(200).send();
     });
   }
+});
+
+router.get('/test', isAuth, (req, res) => {
+  console.log(auth);
+  return res.send({ hello: "jello" });
+});
+
+router.get('/is_auth', (req, res) => {
+  if (auth !== true) {
+    res.send({ auth: false });
+  } else {
+    res.send({ auth: true, usertype: usertype });
+  }
+});
+
+router.get('/is_user', (req, res) => {
+  const { email } = req.body;
+  const sql = `SELECT * FROM user WHERE email = ?`;
+  con.query(sql, [email], (error, results) => {
+    if (error) throw error;
+    var [user] = results;
+    if (user) {
+      console.log(user.username);
+      console.log(user.usertype);
+    }
+  });
 });
 
 router.get("/setsession", (req, res) => {
@@ -74,7 +120,7 @@ router.get("/setsession", (req, res) => {
 
 router.get('/logout', (req, res) => {
   console.log('logout clicked');
-  req.session.destroy();
+  auth = false;
   return res.status(200).send('sucess');
 });
 
