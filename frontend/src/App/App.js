@@ -14,7 +14,6 @@ import TablesPage from '../pages/TablesPage';
 import DatePage from '../pages/DatePage';
 import GroupsizePage from '../pages/GroupsizePage';
 import ConfirmBookingPage from '../pages/ConfirmBookingPage';
-import AddTablePage from '../pages/AddTablePage';
 import BookingOverview from '../pages/BookingOverview';
 
 class App extends React.Component {
@@ -86,9 +85,6 @@ class App extends React.Component {
               </Route>
               <Route path="/booking/confirm" exact>
                 <ConfirmBookingPage isAuth={this.state.auth} usertype={this.state.usertype} />
-              </Route>
-              <Route path="/tables" exact>
-                <AddTablePage isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/overview" exact>
                 <BookingOverview isAuth={this.state.auth} usertype={this.state.usertype} />

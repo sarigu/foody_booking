@@ -2,8 +2,8 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const mysql = require('mysql');
 
-var auth = false;
-var usertype = '';
+let auth = false;
+let usertype = '';
 
 // MYSQL CONNECTION
 
@@ -18,26 +18,26 @@ const con = mysql.createConnection({
 // FUNCTIONS
 
 function checkUser(email, res) {
-  const sql = `SELECT * FROM user WHERE email=?`;
+  const sql = 'SELECT * FROM user WHERE email=?';
   con.query(sql, [email], (error, results) => {
     if (error) throw error;
     const [user] = results;
     if (user) {
-      console.log("user exists");
+      console.log('user exists');
       res.status(400).send({ message: 'User already exists' });
     }
   });
 }
 
-//backend middleware
+// backend middleware
 function isAuth(req, res, next) {
   if (auth !== true) {
     return res.status(401).json({ message: 'Not auth' });
   }
   next();
-};
+}
 
-//Routes
+// Routes
 
 router.post('/signup', async (req, res) => {
   checkUser(req.body.email, res);
@@ -59,26 +59,26 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
-  const sql = `SELECT * FROM user WHERE email = ?`;
+  const sql = 'SELECT * FROM user WHERE email = ?';
   if (email && password) {
     con.query(sql, [email], (error, results) => {
       if (error) throw error;
-      var [user] = results;
+      const [user] = results;
       if (user) {
         bcrypt.compare(password, user.password, (err, result) => {
           console.log(result);
           if (!result) {
             auth = false;
-            res.status(500).send({ error: "Password wrong. Try again." });
+            res.status(500).send({ error: 'Password wrong. Try again.' });
           } else {
             auth = true;
             usertype = user.usertype;
-            res.status(200).send()
+            res.status(200).send();
           }
         });
       } else {
         auth = false;
-        res.status(500).send({ error: "User does not exist. Try again." });
+        res.status(500).send({ error: 'User does not exist. Try again.' });
       }
       return res.status(200).send();
     });
@@ -87,18 +87,18 @@ router.post('/login', (req, res) => {
 
 router.get('/test', isAuth, (req, res) => {
   console.log(auth);
-  return res.send({ hello: "jello" });
+  return res.send({ hello: 'jello' });
 });
 
 router.get('/is_auth', (req, res) => {
   if (auth !== true) {
     res.send({ auth: false });
   } else {
-    res.send({ auth: true, usertype: usertype });
+    res.send({ auth: true, usertype });
   }
 });
 
-router.get('/is_user', (req, res) => {
+/* router.get('/is_user', (req, res) => {
   const { email } = req.body;
   const sql = `SELECT * FROM user WHERE email = ?`;
   con.query(sql, [email], (error, results) => {
@@ -109,26 +109,12 @@ router.get('/is_user', (req, res) => {
       console.log(user.usertype);
     }
   });
-});
-
-router.get("/setsession", (req, res) => {
-  console.log("set");
-  req.session.secretMessage = "secret message oder so";
-  return res.send({ data: req.session });
-});
-
+}); */
 
 router.get('/logout', (req, res) => {
   console.log('logout clicked');
   auth = false;
   return res.status(200).send('sucess');
-});
-
-router.get("/getsession", (req, res) => {
-  console.log("get");
-  console.log(req.session);
-  //console.log(req.session.secretMessage);
-  return res.send({ data: req.session });
 });
 
 module.exports = router;

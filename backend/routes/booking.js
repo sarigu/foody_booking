@@ -53,9 +53,7 @@ router.post('/menu/item/', (req, res) => {
 //  delete menu item
 router.get('/menu/item/:id', (req, res) => {
   const { id } = req.params;
-
   const sql = 'DELETE FROM menu WHERE MenuID = ?';
-
   con.query(sql, [id], (err, result) => {
     if (result) {
       console.log('delete');
@@ -137,11 +135,11 @@ router.get('/bookings', (req, res) => {
 // Add a Table seat
 router.post('/seatadd', (req, res) => {
   console.log(req.body);
-  console.log("seat");
+  console.log('seat');
   /* const sqlInsert = "INSERT INTO `seat` (`SeatID`, `SeatName`, `SeatCapacity`, `SeatStatus`) VALUES (NULL, 'Lounge 5', '25', '0');";
    con.query(sqlInsert, (err, result) => {
      res.send('Data Instrted');
-   });*/
+   }); */
 });
 
 // Delete a Table seat
@@ -272,8 +270,6 @@ router.post('/bookingadd', (req, res) => {
     makeTableUnavailable(tableID);
     res.send({ message: 'Booking Added' });
   });
-
-
 
   /* con.query('SELECT * FROM booking', (err, result) => {
     if (err) throw err;
