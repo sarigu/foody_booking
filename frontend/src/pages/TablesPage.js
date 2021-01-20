@@ -16,7 +16,7 @@ export default class TablesPage extends React.Component {
     const startTime = localStorage.getItem('timeslotStart');
     const endTime = localStorage.getItem('timeslotEnd');
 
-    fetch(`http://localhost:8000/tables/${groupsize}/${timeslotID}`)
+    fetch(`http://localhost:8000/tables/${groupsize}/${timeslotID}/${date}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);

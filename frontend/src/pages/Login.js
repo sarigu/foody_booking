@@ -3,13 +3,17 @@ import { Link } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 
 export default class Login extends Component {
-  handleLogin = async (e) => {
-    e.preventDefault();
+  constructor() {
+    super();
+    this.state = { };
+  }
 
+  handleLogin = (e) => {
+    e.preventDefault();
     const { email, password } = e.target;
     const user = { email: email.value, password: password.value };
 
-    await fetch('http://localhost:8000/auth/login', {
+    fetch('http://localhost:8000/auth/login', {
       method: 'POST',
       body: JSON.stringify(user),
       headers: { 'Content-Type': 'application/json' },

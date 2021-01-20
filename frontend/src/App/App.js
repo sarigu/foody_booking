@@ -14,8 +14,29 @@ import TablesPage from '../pages/TablesPage';
 import DatePage from '../pages/DatePage';
 import GroupsizePage from '../pages/GroupsizePage';
 import ConfirmBookingPage from '../pages/ConfirmBookingPage';
+import AddTablePage from '../pages/AddTablePage';
+import BookingOverview from '../pages/BookingOverview';
 
 class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      auth: false,
+    };
+  }
+
+  componentDidMount = () => {
+    fetch('http://localhost:8000/auth/is_auth')
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        this.setState({ auth: data.auth, usertype: data.usertype });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
     return (
       <div className="app">
@@ -34,37 +55,43 @@ class App extends React.Component {
                 <SignUp />
               </Route>
               <Route path="/index" exact>
-                <Index />
+                <Index isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/menu" exact>
-                <Menu />
+                <Menu isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/recommendation" exact>
-                <MenuRecommendation />
+                <MenuRecommendation isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/editmenu" exact>
-                <MenuEditPage />
+                <MenuEditPage isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/restaurantdetails" exact>
-                <RestaurantDetails />
+                <RestaurantDetails isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/updatedetails" exact>
-                <RestaurantForm />
+                <RestaurantForm isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/booking/date" exact>
-                <DatePage />
+                <DatePage isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/booking/time" exact>
-                <TimeslotsPage />
+                <TimeslotsPage isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/booking/groupsize" exact>
-                <GroupsizePage />
+                <GroupsizePage isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/booking/tables" exact>
-                <TablesPage />
+                <TablesPage isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/booking/confirm" exact>
-                <ConfirmBookingPage />
+                <ConfirmBookingPage isAuth={this.state.auth} usertype={this.state.usertype} />
+              </Route>
+              <Route path="/tables" exact>
+                <AddTablePage isAuth={this.state.auth} usertype={this.state.usertype} />
+              </Route>
+              <Route path="/overview" exact>
+                <BookingOverview isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
             </Switch>
           </div>
