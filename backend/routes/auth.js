@@ -13,7 +13,22 @@ const con = mysql.createConnection({
 });
 
 // FUNCTIONS
+
+function checkUser(email, res) {
+  const sql = `SELECT * FROM user WHERE email=?`;
+  con.query(sql, [email], (error, results) => {
+    if (error) throw error;
+    const [user] = results;
+    if (user) {
+      console.log("user exists");
+      res.status(400).send({ message: 'User already exists' });
+    }
+  });
+}
+
 router.post('/signup', async (req, res) => {
+  checkUser(req.body.email, res);
+
   try {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
@@ -29,34 +44,45 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
-  const sql = 'SELECT * FROM user WHERE email =  ?';
-  await con.query(sql, req.body.email, (err, result) => {
-    if (err) {
-      res.status(500).send();
-    }
-
-    data = JSON.parse(JSON.stringify(result));
-    user = data[0];
-
-    if (!user) {
-      return res.status(500).send({ error: 'User does not exist. Try again.' });
-    }
-
-    bcrypt.compare(req.body.password, user.password, (err, result) => {
-      if (result) {
-        res.status(200).send('success');
-        console.log('success');
+router.post('/login', (req, res) => {
+  const { email, password } = req.body;
+  const sql = `SELECT * FROM user WHERE email = ?`;
+  if (email && password) {
+    con.query(sql, [email], (error, results) => {
+      if (error) throw error;
+      const [user] = results;
+      if (user) {
+        bcrypt.compare(password, user.password, (err, result) => {
+          if (!result) {
+            return res.status(500).send({ error: "Password. Try again." });
+          }
+        });
       } else {
-        res.status(401).send('not allowed');
+        return res.status(500).send({ error: "User does not exist. Try again." });
       }
+      return res.status(200).send();
     });
-  });
+  }
 });
+
+router.get("/setsession", (req, res) => {
+  console.log("set");
+  req.session.secretMessage = "secret message oder so";
+  return res.send({ data: req.session });
+});
+
 
 router.get('/logout', (req, res) => {
   console.log('logout clicked');
+  req.session.destroy();
   return res.status(200).send('sucess');
+});
+
+router.get("/getsession", (req, res) => {
+  console.log("get");
+  console.log(req.session);
+  //console.log(req.session.secretMessage);
+  return res.send({ data: req.session });
 });
 
 module.exports = router;
