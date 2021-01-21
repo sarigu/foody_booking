@@ -19,6 +19,8 @@ export default class RestaurantIndex extends Component {
             <Link to="/booking/date" className="link-elem">Make Booking</Link>
             <br />
             <Link to="/overview" className="link-elem">Booking Overview</Link>
+            <br />
+            <Link to="/edit_tables" className="link-elem">Added available tables</Link>
           </div>
           <div className="menu-container">
             <div className="flex">

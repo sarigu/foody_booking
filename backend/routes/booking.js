@@ -96,7 +96,7 @@ router.post('/restaurantdetails', async (req, res) => {
 
 // get all Timeslots
 router.get('/timeslots', (req, res) => {
-  con.query('SELECT * FROM timeslot  ORDER BY StartTime', (err, result) => {
+  con.query('SELECT * FROM timeslot ORDER BY StartTime', (err, result) => {
     if (err) throw err;
     if (result.length > 0) {
       data = JSON.parse(JSON.stringify(result));
@@ -148,11 +148,9 @@ function makeTableUnavailable(tableID) {
   });
 }
 
-// make booking
+// make booking (changed)
 router.post('/booking', (req, res) => {
-  const { timeslotID } = req.body;
-  const { userID } = req.body;
-  const { tableID } = req.body;
+  const { timeslotID, userID, tableID } = req.body;
   const sql = 'INSERT INTO `booking` (`TimeSlotID`, `UserID`, `TableID`,`BookingStatus`) VALUES ( ? , ?, ?, 1)';
   con.query(sql, [timeslotID, userID, tableID], (err, result) => {
     if (err) throw err;
@@ -199,7 +197,17 @@ router.get('/bookings/:id/:table', (req, res) => {
       return res.status(200).send();
     }
   });
+});
 
+//create table
+
+router.post('/add_table', (req, res) => {
+  const { name, capacity, date, timeslotID } = req.body;
+  const sql = 'INSERT INTO `tables` (`Name`, `Capacity`, `TableStatus`, `TimeslotID`,`Date`) VALUES ( ? , ? , 0, ?, ?)';
+  con.query(sql, [name, capacity, timeslotID, date], (err, result) => {
+    if (err) throw err;
+    res.status(200).send({ message: 'table added' });
+  });
 });
 
 //        ---------------------------------------------------------------------------------

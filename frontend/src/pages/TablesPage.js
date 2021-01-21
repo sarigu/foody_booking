@@ -34,6 +34,18 @@ export default class TablesPage extends React.Component {
       });
   }
 
+  handlePickedTable = (e) => {
+    const tableID = e.target.id;
+    localStorage.setItem('tableID', tableID);
+    const usertype = localStorage.getItem('usertype');
+    console.log(usertype);
+    if (usertype === 'user') {
+      window.location = '/booking/confirm';
+    } else {
+      window.location = '/booking/restaurant_confirm';
+    }
+  }
+
   render() {
     return (
       <div>
@@ -51,7 +63,10 @@ export default class TablesPage extends React.Component {
             <div>Between {this.state.startTime} and {this.state.endTime}  </div>
             <div>
               {this.state.tables && this.state.tables.map((table, index) => (
-                <Table key={`table${index}`} item={table} />
+                <div>
+                  <Table key={`table${index}`} item={table} />
+                  <button id={table.TableID} onClick={this.handlePickedTable}>Pick</button>
+                </div>
               ))}
             </div>
           </div>

@@ -5,7 +5,6 @@ export default class DatePage extends Component {
   handleDate = (e) => {
     e.preventDefault();
     const date = e.target.date.value;
-    console.log(date);
     localStorage.setItem('date', date);
     window.location = '/booking/time';
   }
