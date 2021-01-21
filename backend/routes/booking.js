@@ -10,7 +10,10 @@ const con = mysql.createConnection({
   port: '3306',
 });
 
-// FUNCTIONS
+// ----------  FUNCTIONS
+
+// ----------  Menu ----------
+
 //  get menu
 router.get('/menu', (req, res) => {
   con.query('SELECT * FROM menu WHERE RestaurantID = 1', (err, result) => {
@@ -71,6 +74,8 @@ router.get('/recommendation', (req, res) => {
   });
 });
 
+// ----------  Restaurant Info ----------
+
 //  get restaurant data
 router.get('/restaurantdetails', (req, res) => {
   con.query('SELECT * FROM restaurant', (err, result) => {
@@ -93,6 +98,17 @@ router.post('/restaurantdetails', async (req, res) => {
     return res.send({ message: 'updated' });
   });
 });
+
+// get staff
+router.get('/staff', (req, res) => {
+  con.query('SELECT * FROM user WHERE usertype = "restaurant"', (err, result) => {
+    if (err) throw err;
+    data = JSON.parse(JSON.stringify(result));
+    return res.send({ data });
+  });
+});
+
+// ----------  Booking ----------
 
 // get all Timeslots
 router.get('/timeslots', (req, res) => {
@@ -118,15 +134,6 @@ router.get('/tables/:groupsize/:timeslotID/:date', (req, res) => {
       return res.send(data);
     }
     res.send({ message: 'no entries' });
-  });
-});
-
-//get staff
-router.get('/staff', (req, res) => {
-  con.query('SELECT * FROM user WHERE usertype = "restaurant"', (err, result) => {
-    if (err) throw err;
-    data = JSON.parse(JSON.stringify(result));
-    return res.send({ data });
   });
 });
 
@@ -171,7 +178,7 @@ router.get('/bookings/', (req, res) => {
 
 // get bookings for a certain user
 router.get('/bookings/:userid', (req, res) => {
-  console.log("bookings");
+  console.log('bookings');
   const { userid } = req.params;
   console.log(userid);
   const sql = 'SELECT * FROM booking INNER JOIN user ON user.id = booking.UserID INNER JOIN timeslot ON timeslot.TimeSlotID = booking.TimeSlotID INNER JOIN tables ON tables.TableID = booking.TableID WHERE booking.UserID = ?';
@@ -182,8 +189,7 @@ router.get('/bookings/:userid', (req, res) => {
   });
 });
 
-
-//delete a booking
+// delete a booking
 router.get('/bookings/:id/:table', (req, res) => {
   const { id, table } = req.params;
   console.log(id);
@@ -199,17 +205,16 @@ router.get('/bookings/:id/:table', (req, res) => {
   });
 });
 
-//create table
-
+// create available table
 router.post('/add_table', (req, res) => {
-  const { name, capacity, date, timeslotID } = req.body;
+  const {
+    name, capacity, date, timeslotID,
+  } = req.body;
   const sql = 'INSERT INTO `tables` (`Name`, `Capacity`, `TableStatus`, `TimeslotID`,`Date`) VALUES ( ? , ? , 0, ?, ?)';
   con.query(sql, [name, capacity, timeslotID, date], (err, result) => {
     if (err) throw err;
     res.status(200).send({ message: 'table added' });
   });
 });
-
-//        ---------------------------------------------------------------------------------
 
 module.exports = router;

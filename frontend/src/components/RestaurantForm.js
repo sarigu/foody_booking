@@ -30,7 +30,9 @@ export default class RestaurantForm extends React.Component {
     });
 
     const data = await connection.json();
-    console.log(data);
+    if (data) {
+      window.location = '/restaurantdetails';
+    }
   }
 
   render() {
