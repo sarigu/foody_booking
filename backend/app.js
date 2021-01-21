@@ -4,7 +4,7 @@ const app = express();
 const rateLimiter = require('express-rate-limit');
 const cors = require('cors');
 
-const authRoute = require('./routes/auth');
+//const authRoute = require('./routes/auth');
 const bookingRoute = require('./routes/booking');
 
 //  MIDDLEWARE
@@ -23,11 +23,11 @@ app.use(
   '/auth/',
   rateLimiter({
     windowMs: 10 * 60 * 1000, // 10 minutes
-    max: 40,
+    max: 20,
   }),
 );
 
-app.use('/auth', authRoute);
+app.use('/auth', bookingRoute);
 app.use('/', bookingRoute);
 
 //  RUN SERVER

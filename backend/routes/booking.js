@@ -1,7 +1,13 @@
 const router = require('express').Router();
 const mysql = require('mysql');
+const bcrypt = require('bcrypt');
 
-// MYSQL CONNECTION
+let auth = false;
+let usertype = '';
+let userEmail = '';
+
+
+// ----------   MYSQL CONNECTION
 const con = mysql.createConnection({
   host: 'aws-foodyapp.cvolzzyzesis.us-east-1.rds.amazonaws.com',
   user: 'admin',
@@ -10,12 +16,159 @@ const con = mysql.createConnection({
   port: '3306',
 });
 
-// ----------  FUNCTIONS
+// ----------   backend middleware 
+function isAuth(req, res, next) {
+  if (auth !== true) {
+    return res.status(401).json({ message: 'Not auth' });
+  }
+  next();
+}
+
+
+// ----------  AUTH FUNCTIONS
+
+// check if user is in db already
+function checkUser(email, res) {
+  const sql = 'SELECT * FROM user WHERE email=?';
+  con.query(sql, [email], (error, results) => {
+    if (error) throw error;
+    const [user] = results;
+    if (user) {
+      console.log('user exists');
+      res.status(400).send({ message: 'User already exists' });
+    }
+  });
+}
+
+// backend middleware not in use
+function isAuth(req, res, next) {
+  if (auth !== true) {
+    return res.status(401).json({ message: 'Not auth' });
+  }
+  next();
+}
+
+// sign up an user
+router.post('/auth/signup', async (req, res) => {
+  checkUser(req.body.email, res);
+  try {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const sql = 'INSERT INTO user (email, password, username) VALUES ( ?,  ?,  ?)';
+    await con.query(sql, [req.body.email, hashedPassword, req.body.username], (err, result) => {
+      if (result) {
+        res.status(200).send();
+      }
+    });
+  } catch {
+    res.status(500).send();
+  }
+});
+
+// login
+router.post('/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  const sql = 'SELECT * FROM user WHERE email = ?';
+  if (email && password) {
+    con.query(sql, [email], (error, results) => {
+      if (error) throw error;
+      const [user] = results;
+      if (user) {
+        bcrypt.compare(password, user.password, (err, result) => {
+          console.log(result);
+          if (!result) {
+            auth = false;
+            res.status(500).send({ error: 'Password wrong. Try again.' });
+          } else {
+            auth = true;
+            usertype = user.usertype;
+            userEmail = user.email;
+            res.status(200).send();
+          }
+        });
+      } else {
+        auth = false;
+        res.status(500).send({ error: 'User does not exist. Try again.' });
+      }
+    });
+  } else {
+    res.status(500).send({ error: 'Password and Email required.' });
+  }
+});
+
+// create staff account
+router.post('/auth/create_staff_account', async (req, res) => {
+  console.log(req.body);
+  checkUser(req.body.email, res);
+
+  try {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    const sql = 'INSERT INTO user (email, password, username, usertype) VALUES ( ?,  ?,  ?, "restaurant")';
+    await con.query(sql, [req.body.email, hashedPassword, req.body.username], (err, result) => {
+      if (result) {
+        res.status(200).send();
+      }
+    });
+  } catch {
+    res.status(500).send();
+  }
+});
+
+// create account to make booking in behalf of customer (not account customer can use actually)
+router.post('/auth/create_account', (req, res) => {
+  try {
+    const sql = 'INSERT INTO user (email, password, username, usertype) VALUES ( ?, null , ?, "user")';
+    con.query(sql, [req.body.email, req.body.username], (err, result) => {
+      console.log(result.insertId);
+      const userid = result.insertId;
+      res.send({ userid });
+    });
+  } catch {
+    res.status(500).send();
+  }
+});
+
+// get a user from db with provided email
+router.post('/auth/user', (req, res) => {
+  const { userEmail } = req.body;
+  const sql = 'SELECT * FROM user WHERE email = ?';
+  con.query(sql, [userEmail], (error, results) => {
+    if (error) throw error;
+    const [user] = results;
+    console.log(user);
+    res.send(user);
+  });
+});
+
+// check if user is logged in
+router.get('/auth/is_auth', (req, res) => {
+  if (auth === true) {
+    res.send({ auth: true, usertype, userEmail });
+  } else {
+    res.send({ auth: false });
+  }
+});
+
+// log out
+router.get('/auth/logout', (req, res) => {
+  console.log('logout clicked');
+  auth = false;
+  usertype = '';
+  userEmail = '';
+  console.log(auth, usertype, userEmail);
+  return res.status(200).send('sucess');
+});
+
+
+// ----------  Booking FUNCTIONS
 
 // ----------  Menu ----------
 
 //  get menu
-router.get('/menu', (req, res) => {
+router.get('/menu', isAuth, (req, res) => {
+  console.log(auth);
   con.query('SELECT * FROM menu WHERE RestaurantID = 1', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
@@ -24,7 +177,7 @@ router.get('/menu', (req, res) => {
 });
 
 //  add menu item
-router.post('/menu/items', (req, res) => {
+router.post('/menu/items', isAuth, (req, res) => {
   try {
     const sql = 'INSERT INTO menu (Item, Price, Description, RestaurantID) VALUES ( ?,  ?,  ?, ?)';
     con.query(sql, [req.body.menuItem, req.body.price, req.body.description, 1], (err, result) => {
@@ -38,7 +191,7 @@ router.post('/menu/items', (req, res) => {
 });
 
 //  update menu item
-router.post('/menu/item/', (req, res) => {
+router.post('/menu/item/', isAuth, (req, res) => {
   console.log(req.body);
   const {
     itemID, item, price, description,
@@ -54,7 +207,7 @@ router.post('/menu/item/', (req, res) => {
 });
 
 //  delete menu item
-router.get('/menu/item/:id', (req, res) => {
+router.get('/menu/item/:id', isAuth, (req, res) => {
   const { id } = req.params;
   const sql = 'DELETE FROM menu WHERE MenuID = ?';
   con.query(sql, [id], (err, result) => {
@@ -66,7 +219,7 @@ router.get('/menu/item/:id', (req, res) => {
 });
 
 //  get one random menu item
-router.get('/recommendation', (req, res) => {
+router.get('/recommendation', isAuth, (req, res) => {
   con.query('SELECT * FROM menu ORDER BY RAND() LIMIT 1', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
@@ -77,7 +230,7 @@ router.get('/recommendation', (req, res) => {
 // ----------  Restaurant Info ----------
 
 //  get restaurant data
-router.get('/restaurantdetails', (req, res) => {
+router.get('/restaurantdetails', isAuth, (req, res) => {
   con.query('SELECT * FROM restaurant', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
@@ -86,7 +239,7 @@ router.get('/restaurantdetails', (req, res) => {
 });
 
 //  update restaurant data
-router.post('/restaurantdetails', async (req, res) => {
+router.post('/restaurantdetails', isAuth, async (req, res) => {
   const {
     name, address, description, email, phone,
   } = req.body;
@@ -100,7 +253,7 @@ router.post('/restaurantdetails', async (req, res) => {
 });
 
 // get staff
-router.get('/staff', (req, res) => {
+router.get('/staff', isAuth, (req, res) => {
   con.query('SELECT * FROM user WHERE usertype = "restaurant"', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
@@ -111,7 +264,7 @@ router.get('/staff', (req, res) => {
 // ----------  Booking ----------
 
 // get all Timeslots
-router.get('/timeslots', (req, res) => {
+router.get('/timeslots', isAuth, (req, res) => {
   con.query('SELECT * FROM timeslot ORDER BY StartTime', (err, result) => {
     if (err) throw err;
     if (result.length > 0) {
@@ -123,7 +276,7 @@ router.get('/timeslots', (req, res) => {
 });
 
 // get available tables
-router.get('/tables/:groupsize/:timeslotID/:date', (req, res) => {
+router.get('/tables/:groupsize/:timeslotID/:date', isAuth, (req, res) => {
   const { groupsize, timeslotID, date } = req.params;
   const sql = 'SELECT * FROM tables WHERE TableStatus = 0 AND Date = ? AND TimeslotID = ? AND Capacity >= ?';
   con.query(sql, [date, timeslotID, groupsize], (err, result) => {
@@ -156,7 +309,7 @@ function makeTableUnavailable(tableID) {
 }
 
 // make booking (changed)
-router.post('/booking', (req, res) => {
+router.post('/booking', isAuth, (req, res) => {
   const { timeslotID, userID, tableID } = req.body;
   const sql = 'INSERT INTO `booking` (`TimeSlotID`, `UserID`, `TableID`,`BookingStatus`) VALUES ( ? , ?, ?, 1)';
   con.query(sql, [timeslotID, userID, tableID], (err, result) => {
@@ -167,7 +320,7 @@ router.post('/booking', (req, res) => {
 });
 
 // get all bookings
-router.get('/bookings/', (req, res) => {
+router.get('/bookings/', isAuth, (req, res) => {
   con.query('SELECT * FROM booking INNER JOIN user ON user.id = booking.UserID INNER JOIN timeslot ON timeslot.TimeSlotID = booking.TimeSlotID INNER JOIN tables ON tables.TableID = booking.TableID', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
@@ -177,7 +330,7 @@ router.get('/bookings/', (req, res) => {
 });
 
 // get bookings for a certain user
-router.get('/bookings/:userid', (req, res) => {
+router.get('/bookings/:userid', isAuth, (req, res) => {
   console.log('bookings');
   const { userid } = req.params;
   console.log(userid);
@@ -190,7 +343,7 @@ router.get('/bookings/:userid', (req, res) => {
 });
 
 // delete a booking
-router.get('/bookings/:id/:table', (req, res) => {
+router.get('/bookings/:id/:table', isAuth, (req, res) => {
   const { id, table } = req.params;
   console.log(id);
   console.log(table);
@@ -206,7 +359,7 @@ router.get('/bookings/:id/:table', (req, res) => {
 });
 
 // create available table
-router.post('/add_table', (req, res) => {
+router.post('/add_table', isAuth, (req, res) => {
   const {
     name, capacity, date, timeslotID,
   } = req.body;
