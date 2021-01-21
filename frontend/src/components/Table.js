@@ -4,7 +4,13 @@ export default class Table extends Component {
   handlePickedTable = (e) => {
     const tableID = e.target.id;
     localStorage.setItem('tableID', tableID);
-    window.location = '/booking/confirm';
+    const usertype = localStorage.getItem('usertype');
+    console.log(usertype);
+    if (usertype === 'user') {
+      window.location = '/booking/confirm';
+    } else {
+      window.location = '/booking/restaurant_confirm';
+    }
   }
 
   render() {

@@ -80,6 +80,21 @@ router.post('/create_staff_account', async (req, res) => {
   }
 });
 
+//create account to make booking in behalf of customer
+router.post('/create_account', (req, res) => {
+  console.log("create account");
+  try {
+    const sql = 'INSERT INTO user (email, password, username, usertype) VALUES ( ?, null , ?, "user")';
+    con.query(sql, [req.body.email, req.body.username], (err, result) => {
+      console.log(result.insertId);
+      const userid = result.insertId;
+      res.send({ userid: userid });
+    });
+  } catch {
+    res.status(500).send();
+  }
+});
+
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
   const sql = 'SELECT * FROM user WHERE email = ?';

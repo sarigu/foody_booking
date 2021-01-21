@@ -18,6 +18,7 @@ import BookingOverview from '../pages/BookingOverview';
 import Contact from '../pages/Contact';
 import StaffPage from '../pages/StaffPage';
 import CancelBooking from '../pages/CancelBooking';
+import ConfirmByRestaurant from '../pages/ConfirmByRestaurant';
 
 class App extends React.Component {
   constructor() {
@@ -33,6 +34,7 @@ class App extends React.Component {
       .then((data) => {
         console.log(data);
         localStorage.setItem('userEmail', data.userEmail);
+        localStorage.setItem('usertype', data.usertype);
         this.setState({ auth: data.auth, usertype: data.usertype });
       })
       .catch((err) => {
@@ -85,10 +87,13 @@ class App extends React.Component {
                 <GroupsizePage />
               </Route>
               <Route path="/booking/tables" exact>
-                <TablesPage />
+                <TablesPage isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/booking/confirm" exact>
                 <ConfirmBookingPage isAuth={this.state.auth} usertype={this.state.usertype} />
+              </Route>
+              <Route path="/booking/restaurant_confirm" exact>
+                <ConfirmByRestaurant isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/overview" exact>
                 <BookingOverview isAuth={this.state.auth} usertype={this.state.usertype} />

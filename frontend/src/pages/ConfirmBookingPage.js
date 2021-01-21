@@ -60,7 +60,7 @@ export default class ConfirmBookingPage extends React.Component {
             <Link to="/booking/date">Date</Link>
             <Link to="/booking/time">Timeslot</Link>
             <Link to="/booking/groupsize">Group Size</Link>
-            <Link to="/booking/tables">Group Size</Link>
+            <Link to="/booking/tables">Tables</Link>
           </div>
           <div>
             <h2>Confirm Booking</h2>
