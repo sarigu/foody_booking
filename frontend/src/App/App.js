@@ -15,6 +15,8 @@ import DatePage from '../pages/DatePage';
 import GroupsizePage from '../pages/GroupsizePage';
 import ConfirmBookingPage from '../pages/ConfirmBookingPage';
 import BookingOverview from '../pages/BookingOverview';
+import Contact from '../pages/Contact';
+import StaffPage from '../pages/StaffPage';
 
 class App extends React.Component {
   constructor() {
@@ -29,6 +31,7 @@ class App extends React.Component {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        localStorage.setItem('userEmail', data.userEmail);
         this.setState({ auth: data.auth, usertype: data.usertype });
       })
       .catch((err) => {
@@ -75,19 +78,25 @@ class App extends React.Component {
                 <DatePage isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/booking/time" exact>
-                <TimeslotsPage isAuth={this.state.auth} usertype={this.state.usertype} />
+                <TimeslotsPage />
               </Route>
               <Route path="/booking/groupsize" exact>
-                <GroupsizePage isAuth={this.state.auth} usertype={this.state.usertype} />
+                <GroupsizePage />
               </Route>
               <Route path="/booking/tables" exact>
-                <TablesPage isAuth={this.state.auth} usertype={this.state.usertype} />
+                <TablesPage />
               </Route>
               <Route path="/booking/confirm" exact>
-                <ConfirmBookingPage isAuth={this.state.auth} usertype={this.state.usertype} />
+                <ConfirmBookingPage />
               </Route>
               <Route path="/overview" exact>
                 <BookingOverview isAuth={this.state.auth} usertype={this.state.usertype} />
+              </Route>
+              <Route path="/contact" exact>
+                <Contact isAuth={this.state.auth} usertype={this.state.usertype} />
+              </Route>
+              <Route path="/staff" exact>
+                <StaffPage isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
             </Switch>
           </div>

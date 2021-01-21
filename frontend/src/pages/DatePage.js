@@ -13,15 +13,20 @@ export default class DatePage extends Component {
   render() {
     return (
       <div>
-        <Navbar />
-        <div className="main">
-          <h2>Choose a date</h2>
-          <form onSubmit={this.handleDate}>
-            <label htmlFor="text">Date</label>
-            <input type="date" id="date" name="date" />
-            <button type="submit">Go</button>
-          </form>
-        </div>
+        {this.props.isAuth === true ? (
+          <div>
+            <Navbar />
+            <div className="main">
+              <h2>Choose a date</h2>
+              <form onSubmit={this.handleDate}>
+                <label htmlFor="text">Date</label>
+                <input type="date" id="date" name="date" placeholder="yyyy-mm-dd" />
+                <button type="submit">Go</button>
+              </form>
+            </div>
+          </div>
+        )
+          : (<div><h2>Not authorized</h2></div>)}
       </div>
     );
   }

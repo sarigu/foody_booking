@@ -29,7 +29,7 @@ export default class RestaurantIndex extends Component {
             <br />
             <Link to="/restaurantdetails" className="link-elem">Edit Restaurant Info</Link>
             <br />
-            <Link to="" className="link-elem">Add new restaurant workers</Link>
+            <Link to="/staff" className="link-elem">Add staff</Link>
           </div>
         </div>
       </div>

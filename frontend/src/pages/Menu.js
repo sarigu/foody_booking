@@ -22,13 +22,18 @@ export default class Menu extends React.Component {
   render() {
     return (
       <div>
-        <Navbar />
-        <div className="main">
-          <h1>Menu</h1>
-          {this.state.menuItems && this.state.menuItems.map((item, index) => (
-            <MenuItem key={`item${index}`} item={item} />
-          ))}
-        </div>
+        {this.props.isAuth === true ? (
+          <div>
+            <Navbar />
+            <div className="main">
+              <h1>Menu</h1>
+              {this.state.menuItems && this.state.menuItems.map((item, index) => (
+                <MenuItem key={`item${index}`} item={item} />
+              ))}
+            </div>
+          </div>
+        )
+          : (<div><h2>Not authorized</h2></div>)}
       </div>
     );
   }

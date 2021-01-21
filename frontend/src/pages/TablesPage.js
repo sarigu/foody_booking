@@ -19,10 +19,15 @@ export default class TablesPage extends React.Component {
     fetch(`http://localhost:8000/tables/${groupsize}/${timeslotID}/${date}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        this.setState({
-          tables: data, groupsize: groupsize, date: date, startTime: startTime, endTime: endTime,
-        });
+        if (!data.message) {
+          this.setState({
+            tables: data, groupsize: groupsize, date: date, startTime: startTime, endTime: endTime,
+          });
+        } else {
+          this.setState({
+            groupsize: groupsize, date: date, startTime: startTime, endTime: endTime,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);

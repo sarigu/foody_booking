@@ -30,12 +30,17 @@ export default class MenuRecommendation extends React.Component {
   render() {
     return (
       <div>
-        <Navbar />
-        <div className="main">
-          <h1>Your surprise menu item</h1>
-          <MenuItem item={this.state.item} />
-          <button onClick={this.refreshPage}>Get a new surprise</button>
-        </div>
+        {this.props.isAuth === true ? (
+          <div>
+            <Navbar />
+            <div className="main">
+              <h1>Your surprise menu item</h1>
+              <MenuItem item={this.state.item} />
+              <button onClick={this.refreshPage}>Get a new surprise</button>
+            </div>
+          </div>
+        )
+          : (<div><h2>Not authorized</h2></div>)}
       </div>
     );
   }

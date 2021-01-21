@@ -2,8 +2,9 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const mysql = require('mysql');
 
-let auth = false;
-let usertype = '';
+var auth = false;
+var usertype = "";
+var userEmail = "";
 
 // MYSQL CONNECTION
 
@@ -18,6 +19,7 @@ const con = mysql.createConnection({
 // FUNCTIONS
 
 function checkUser(email, res) {
+  console.log(checkUser);
   const sql = 'SELECT * FROM user WHERE email=?';
   con.query(sql, [email], (error, results) => {
     if (error) throw error;
@@ -28,6 +30,7 @@ function checkUser(email, res) {
     }
   });
 }
+
 
 // backend middleware
 function isAuth(req, res, next) {
@@ -57,6 +60,26 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+//create staff account
+router.post('/create_staff_account', async (req, res) => {
+  console.log(req.body);
+  checkUser(req.body.email, res);
+
+  try {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    const sql = 'INSERT INTO user (email, password, username, usertype) VALUES ( ?,  ?,  ?, "restaurant")';
+    await con.query(sql, [req.body.email, hashedPassword, req.body.username], (err, result) => {
+      if (result) {
+        res.status(200).send();
+      }
+    });
+  } catch {
+    res.status(500).send();
+  }
+});
+
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
   const sql = 'SELECT * FROM user WHERE email = ?';
@@ -73,6 +96,7 @@ router.post('/login', (req, res) => {
           } else {
             auth = true;
             usertype = user.usertype;
+            userEmail = user.email;
             res.status(200).send();
           }
         });
@@ -80,40 +104,39 @@ router.post('/login', (req, res) => {
         auth = false;
         res.status(500).send({ error: 'User does not exist. Try again.' });
       }
-      return res.status(200).send();
     });
+  } else {
+    res.status(500).send({ error: 'Password and Email required.' });
   }
 });
 
-router.get('/test', isAuth, (req, res) => {
-  console.log(auth);
-  return res.send({ hello: 'jello' });
+router.post('/user', (req, res) => {
+  console.log("find user");
+  const { userEmail } = req.body;
+  console.log(req.body.userEmail);
+  const sql = 'SELECT * FROM user WHERE email = ?';
+  con.query(sql, [userEmail], (error, results) => {
+    if (error) throw error;
+    const [user] = results;
+    console.log(user)
+    res.send(user);
+  });
 });
 
 router.get('/is_auth', (req, res) => {
-  if (auth !== true) {
-    res.send({ auth: false });
+  if (auth === true) {
+    res.send({ auth: true, usertype: usertype, userEmail: userEmail });
   } else {
-    res.send({ auth: true, usertype });
+    res.send({ auth: false });
   }
 });
-
-/* router.get('/is_user', (req, res) => {
-  const { email } = req.body;
-  const sql = `SELECT * FROM user WHERE email = ?`;
-  con.query(sql, [email], (error, results) => {
-    if (error) throw error;
-    var [user] = results;
-    if (user) {
-      console.log(user.username);
-      console.log(user.usertype);
-    }
-  });
-}); */
 
 router.get('/logout', (req, res) => {
   console.log('logout clicked');
   auth = false;
+  usertype = "";
+  userEmail = "";
+  console.log(auth, usertype, userEmail)
   return res.status(200).send('sucess');
 });
 

@@ -62,31 +62,36 @@ export default class Menu extends React.Component {
   render() {
     return (
       <div>
-        <Navbar />
-        <div className="main">
-          <h1>Menu</h1>
+        {this.props.isAuth === true && this.props.usertype === 'restaurant' ? (
           <div>
-            {this.state.menuItems && this.state.menuItems.map((item, index) => (
-              this.state.update === true && this.state.updateID === item.MenuID
-                ? (
-                  <div key={`item${index}`}>
-                    <MenuItemUpdate item={item} />
-                  </div>
-                ) : (
-                  <div key={`item${index}`}>
-                    <MenuItem item={item} />
-                    <button id={`${item.MenuID}`} onClick={this.handleDeleteMenuItem}>Remove</button>
-                    <button id={`${item.MenuID}`} onClick={this.handleChangeToUpdateItem}>Update</button>
-                  </div>
-                )
-            ))}
+            <Navbar />
+            <div className="main">
+              <h1>Menu</h1>
+              <div>
+                {this.state.menuItems && this.state.menuItems.map((item, index) => (
+                  this.state.update === true && this.state.updateID === item.MenuID
+                    ? (
+                      <div key={`item${index}`}>
+                        <MenuItemUpdate item={item} />
+                      </div>
+                    ) : (
+                      <div key={`item${index}`}>
+                        <MenuItem item={item} />
+                        <button id={`${item.MenuID}`} onClick={this.handleDeleteMenuItem}>Remove</button>
+                        <button id={`${item.MenuID}`} onClick={this.handleChangeToUpdateItem}>Update</button>
+                      </div>
+                    )
+                ))}
+              </div>
+              <br />
+              <div>
+                <h2>Add new menu items</h2>
+                <MenuItemForm onAddMenuItem={this.handleAddMenuItem} />
+              </div>
+            </div>
           </div>
-          <br />
-          <div>
-            <h2>Add new menu items</h2>
-            <MenuItemForm onAddMenuItem={this.handleAddMenuItem} />
-          </div>
-        </div>
+        )
+          : (<div><h2>Not authorized</h2></div>)}
       </div>
     );
   }

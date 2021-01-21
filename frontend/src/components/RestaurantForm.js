@@ -40,23 +40,28 @@ export default class RestaurantForm extends React.Component {
 
     return (
       <div>
-        <Navbar />
-        <div className="main">
-          <h1>Restaurant Details</h1>
-          <form id="retaurantForm" method="POST" onSubmit={this.handleDetailsUpdate}>
-            <label htmlFor="name">Name</label>
-            <input name="name" id="name" type="text" defaultValue={Name} />
-            <label htmlFor="address">Address</label>
-            <input name="address" id="address" type="text" defaultValue={Address} />
-            <label htmlFor="description">Description</label>
-            <input name="description" id="description" type="text" defaultValue={Description} />
-            <label htmlFor="email">Email</label>
-            <input name="email" id="email" type="email" defaultValue={Email} />
-            <label htmlFor="phone">Phone</label>
-            <input name="phone" id="phone" type="tel" defaultValue={Phone} />
-            <button>Update</button>
-          </form>
-        </div>
+        {this.props.isAuth === true && this.props.usertype === 'restaurant' ? (
+          <div>
+            <Navbar />
+            <div className="main">
+              <h1>Restaurant Details</h1>
+              <form id="retaurantForm" method="POST" onSubmit={this.handleDetailsUpdate}>
+                <label htmlFor="name">Name</label>
+                <input name="name" id="name" type="text" defaultValue={Name} />
+                <label htmlFor="address">Address</label>
+                <input name="address" id="address" type="text" defaultValue={Address} />
+                <label htmlFor="description">Description</label>
+                <input name="description" id="description" type="text" defaultValue={Description} />
+                <label htmlFor="email">Email</label>
+                <input name="email" id="email" type="email" defaultValue={Email} />
+                <label htmlFor="phone">Phone</label>
+                <input name="phone" id="phone" type="tel" defaultValue={Phone} />
+                <button>Update</button>
+              </form>
+            </div>
+          </div>
+        )
+          : (<div><h2>Not authorized</h2></div>)}
       </div>
     );
   }

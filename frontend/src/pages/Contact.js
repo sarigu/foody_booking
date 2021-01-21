@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 
 export default class RestaurantDetails extends React.Component {
@@ -26,34 +25,33 @@ export default class RestaurantDetails extends React.Component {
 
     return (
       <div>
-        {this.props.isAuth === true && this.props.usertype === 'restaurant' ? (
+        {this.props.isAuth === true ? (
           <div>
             <Navbar />
             <div className="main">
-              <h1>Restaurant Details</h1>
+              <h1>Contact</h1>
               <div>
                 <div>
-                  <span className="boldText">Name:</span>
+                  <span className="boldText">Name: </span>
                   {Name}
                 </div>
                 <div>
-                  <span className="boldText">Address:</span>
+                  <span className="boldText">Address: </span>
                   {Address}
                 </div>
                 <div>
-                  <span className="boldText">Description:</span>
+                  <span className="boldText">Description: </span>
                   {Description}
                 </div>
                 <div>
-                  <span className="boldText">Email:</span>
+                  <span className="boldText">Email: </span>
                   {Email}
                 </div>
                 <div>
-                  <span className="boldText">Phone:</span>
+                  <span className="boldText">Phone: </span>
                   {Phone}
                 </div>
               </div>
-              <Link to="/updatedetails">Edit</Link>
             </div>
           </div>
         )

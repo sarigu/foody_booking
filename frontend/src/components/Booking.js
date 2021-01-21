@@ -5,8 +5,9 @@ export default class Booking extends Component {
     const { BookingID } = this.props.item;
     return (
       <div>
-        <h2>one booking</h2>
-        <div>{BookingID}</div>
+        <h2>{BookingID}</h2>
+        <div><button>Delete</button>
+        </div>
       </div>
     );
   }
