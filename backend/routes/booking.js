@@ -94,7 +94,7 @@ router.post('/restaurantdetails', async (req, res) => {
   });
 });
 
-// ------- get all Timeslots
+// get all Timeslots
 router.get('/timeslots', (req, res) => {
   con.query('SELECT * FROM timeslot  ORDER BY StartTime', (err, result) => {
     if (err) throw err;
@@ -130,6 +130,15 @@ router.get('/staff', (req, res) => {
   });
 });
 
+// after booking cancellation make table available
+function makeTableAvailable(tableID) {
+  const sql = 'UPDATE tables SET TableStatus = 0 WHERE TableID = ?';
+  con.query(sql, [tableID], (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+}
+
 // after booking make table unavailable
 function makeTableUnavailable(tableID) {
   const sql = 'UPDATE tables SET TableStatus = 1 WHERE TableID = ?';
@@ -154,11 +163,30 @@ router.post('/booking', (req, res) => {
 
 // get all bookings
 router.get('/bookings', (req, res) => {
-  con.query('SELECT * FROM booking', (err, result) => {
+  con.query('SELECT * FROM booking INNER JOIN user ON user.id = booking.UserID INNER JOIN timeslot ON timeslot.TimeSlotID = booking.TimeSlotID INNER JOIN tables ON tables.TableID = booking.TableID', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
+    console.log(data);
     return res.send({ data });
   });
+});
+
+//delete a booking
+
+router.get('/bookings/:id/:table', (req, res) => {
+  const { id, table } = req.params;
+  console.log(id);
+  console.log(table);
+  const sql = 'DELETE FROM booking WHERE BookingID=?';
+  con.query(sql, [id], (err, result) => {
+    if (err) throw err;
+    data = JSON.parse(JSON.stringify(result));
+    if (data) {
+      makeTableAvailable(table);
+      return res.status(200).send();
+    }
+  });
+
 });
 
 //        ---------------------------------------------------------------------------------

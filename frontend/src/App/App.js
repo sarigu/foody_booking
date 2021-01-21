@@ -87,7 +87,7 @@ class App extends React.Component {
                 <TablesPage />
               </Route>
               <Route path="/booking/confirm" exact>
-                <ConfirmBookingPage />
+                <ConfirmBookingPage isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
               <Route path="/overview" exact>
                 <BookingOverview isAuth={this.state.auth} usertype={this.state.usertype} />
