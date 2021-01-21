@@ -84,3 +84,7 @@ a{
 .boldText{
   font-weight: bold;
 }
+
+.reservedTable{
+  color: grey;
+}

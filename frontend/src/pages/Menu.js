@@ -27,9 +27,9 @@ export default class Menu extends React.Component {
             <Navbar />
             <div className="main">
               <h1>Menu</h1>
-              {this.state.menuItems && this.state.menuItems.map((item, index) => (
+              {this.state.menuItems ? this.state.menuItems.map((item, index) => (
                 <MenuItem key={`item${index}`} item={item} />
-              ))}
+              )) : (<div> No Menu </div>)}
             </div>
           </div>
         )

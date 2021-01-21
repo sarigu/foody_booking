@@ -43,9 +43,9 @@ export default class Menu extends React.Component {
             <Navbar />
             <div className="main">
               <h1>See current staff</h1>
-              {this.state.staff && this.state.staff.map((item, index) => (
+              {this.state.staff ? this.state.staff.map((item, index) => (
                 <Staff key={`staff${index}`} item={item} />
-              ))}
+              )) : (<div> No Staff </div>)}
               <div>
                 <h1>Add staff</h1>
                 <form onSubmit={this.handleNewStaff}>

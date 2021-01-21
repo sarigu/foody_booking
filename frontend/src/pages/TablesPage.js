@@ -6,7 +6,7 @@ import Table from '../components/Table';
 export default class TablesPage extends React.Component {
   constructor() {
     super();
-    this.state = { tables: [] };
+    this.state = {};
   }
 
   componentDidMount = async () => {
@@ -62,12 +62,12 @@ export default class TablesPage extends React.Component {
             <div>On  {this.state.date} </div>
             <div>Between {this.state.startTime} and {this.state.endTime}  </div>
             <div>
-              {this.state.tables && this.state.tables.map((table, index) => (
+              {this.state.tables ? this.state.tables.map((table, index) => (
                 <div>
                   <Table key={`table${index}`} item={table} />
                   <button id={table.TableID} onClick={this.handlePickedTable}>Pick</button>
                 </div>
-              ))}
+              )) : (<div> No Available Tables </div>)}
             </div>
           </div>
         </div>

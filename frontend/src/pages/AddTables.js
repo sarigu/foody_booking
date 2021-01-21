@@ -25,12 +25,12 @@ export default class AddTables extends React.Component {
     e.preventDefault();
     const date = e.target.date.value;
     const timeslotID = e.target.timeslot.value;
-    const groupsize = 0;
-    this.getTables(date, timeslotID, groupsize);
+    this.getTables(date, timeslotID);
   }
 
-  getTables = (date, timeslotID, groupsize) => {
-    fetch(`http://localhost:8000/tables/${groupsize}/${timeslotID}/${date}`)
+  getTables = (date, timeslotID) => {
+    console.log('change');
+    fetch(`http://localhost:8000/tables/${timeslotID}/${date}`)
       .then((res) => res.json())
       .then((data) => {
         if (!data.message) {
@@ -86,9 +86,9 @@ export default class AddTables extends React.Component {
               </form>
               <h2>Available Tables</h2>
               <div>
-                {this.state.tables && this.state.tables.map((table, index) => (
+                {this.state.tables ? this.state.tables.map((table, index) => (
                   <Table key={`table${index}`} item={table} />
-                ))}
+                )) : (<div>no tables</div>)}
               </div>
               <div>
                 <h2>Add new tables for {this.state.date}</h2>

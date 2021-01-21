@@ -78,7 +78,7 @@ router.post('/auth/login', (req, res) => {
           console.log(result);
           if (!result) {
             auth = false;
-            res.status(500).send({ error: 'Password wrong. Try again.' });
+            res.status(401).send({ error: 'Password wrong. Try again.' });
           } else {
             auth = true;
             usertype = user.usertype;
@@ -88,11 +88,11 @@ router.post('/auth/login', (req, res) => {
         });
       } else {
         auth = false;
-        res.status(500).send({ error: 'User does not exist. Try again.' });
+        res.status(401).send({ error: 'User does not exist. Try again.' });
       }
     });
   } else {
-    res.status(500).send({ error: 'Password and Email required.' });
+    res.status(401).send({ error: 'Password and Email required.' });
   }
 });
 
@@ -137,7 +137,6 @@ router.post('/auth/user', (req, res) => {
   con.query(sql, [userEmail], (error, results) => {
     if (error) throw error;
     const [user] = results;
-    console.log(user);
     res.send(user);
   });
 });
@@ -157,8 +156,7 @@ router.get('/auth/logout', (req, res) => {
   auth = false;
   usertype = '';
   userEmail = '';
-  console.log(auth, usertype, userEmail);
-  return res.status(200).send('sucess');
+  return res.status(200).send('success');
 });
 
 
@@ -275,11 +273,26 @@ router.get('/timeslots', isAuth, (req, res) => {
   });
 });
 
-// get available tables
+// get available tables for when in booking flow
 router.get('/tables/:groupsize/:timeslotID/:date', isAuth, (req, res) => {
   const { groupsize, timeslotID, date } = req.params;
   const sql = 'SELECT * FROM tables WHERE TableStatus = 0 AND Date = ? AND TimeslotID = ? AND Capacity >= ?';
   con.query(sql, [date, timeslotID, groupsize], (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    if (result.length > 0) {
+      data = JSON.parse(JSON.stringify(result));
+      return res.send(data);
+    }
+    res.send({ message: 'no entries' });
+  });
+});
+
+// get available tables overview
+router.get('/tables/:timeslotID/:date', isAuth, (req, res) => {
+  const { timeslotID, date } = req.params;
+  const sql = 'SELECT * FROM tables WHERE Date = ? AND TimeslotID = ?';
+  con.query(sql, [date, timeslotID], (err, result) => {
     if (err) throw err;
     console.log(result);
     if (result.length > 0) {
@@ -324,8 +337,15 @@ router.get('/bookings/', isAuth, (req, res) => {
   con.query('SELECT * FROM booking INNER JOIN user ON user.id = booking.UserID INNER JOIN timeslot ON timeslot.TimeSlotID = booking.TimeSlotID INNER JOIN tables ON tables.TableID = booking.TableID', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
+    activeBookings = [];
+    oldBookings = [];
     console.log(data);
-    return res.send({ data });
+    if (data.BookingStatus === 1) {
+      oldBookings.push(data)
+    } else {
+      activeBookings.push(data)
+    }
+    return res.send({ activeBookings: activeBookings, oldBookings: oldBookings });
   });
 });
 

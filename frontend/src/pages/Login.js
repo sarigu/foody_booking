@@ -5,7 +5,7 @@ import LoginForm from '../components/LoginForm';
 export default class Login extends Component {
   constructor() {
     super();
-    this.state = { };
+    this.state = {};
   }
 
   handleLogin = (e) => {
