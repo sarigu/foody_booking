@@ -17,6 +17,7 @@ import ConfirmBookingPage from '../pages/ConfirmBookingPage';
 import BookingOverview from '../pages/BookingOverview';
 import Contact from '../pages/Contact';
 import StaffPage from '../pages/StaffPage';
+import CancelBooking from '../pages/CancelBooking';
 
 class App extends React.Component {
   constructor() {
@@ -97,6 +98,9 @@ class App extends React.Component {
               </Route>
               <Route path="/staff" exact>
                 <StaffPage isAuth={this.state.auth} usertype={this.state.usertype} />
+              </Route>
+              <Route path="/cancel_booking" exact>
+                <CancelBooking isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
             </Switch>
           </div>

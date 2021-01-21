@@ -162,7 +162,7 @@ router.post('/booking', (req, res) => {
 });
 
 // get all bookings
-router.get('/bookings', (req, res) => {
+router.get('/bookings/', (req, res) => {
   con.query('SELECT * FROM booking INNER JOIN user ON user.id = booking.UserID INNER JOIN timeslot ON timeslot.TimeSlotID = booking.TimeSlotID INNER JOIN tables ON tables.TableID = booking.TableID', (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
@@ -171,8 +171,21 @@ router.get('/bookings', (req, res) => {
   });
 });
 
-//delete a booking
+// get bookings for a certain user
+router.get('/bookings/:userid', (req, res) => {
+  console.log("bookings");
+  const { userid } = req.params;
+  console.log(userid);
+  const sql = 'SELECT * FROM booking INNER JOIN user ON user.id = booking.UserID INNER JOIN timeslot ON timeslot.TimeSlotID = booking.TimeSlotID INNER JOIN tables ON tables.TableID = booking.TableID WHERE booking.UserID = ?';
+  con.query(sql, [userid], (err, result) => {
+    if (err) throw err;
+    data = JSON.parse(JSON.stringify(result));
+    return res.send({ data });
+  });
+});
 
+
+//delete a booking
 router.get('/bookings/:id/:table', (req, res) => {
   const { id, table } = req.params;
   console.log(id);

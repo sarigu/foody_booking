@@ -5,7 +5,7 @@ export default class Booking extends Component {
     const { id, table } = e.target.dataset;
     try {
       fetch(`http://localhost:8000/bookings/${id}/${table}`)
-        .then((response) => (response.status === 200 ? window.location = '/overview' : window.location = '/overview'));
+        .then((response) => (response.status === 200 ? location.reload() : location.reload()));
     } catch (err) {
       console.log(err);
     }

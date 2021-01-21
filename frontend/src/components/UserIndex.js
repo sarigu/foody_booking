@@ -17,6 +17,8 @@ export default class UserIndex extends Component {
               <span className="emojis">&#127869;</span>
             </div>
             <Link to="/booking/date" className="link-elem">Find vacant tables</Link>
+            <br />
+            <Link to="/cancel_booking" className="link-elem">Cancel a booking</Link>
           </div>
           <div className="menu-container">
             <div className="flex">
