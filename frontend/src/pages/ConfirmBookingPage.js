@@ -46,6 +46,7 @@ export default class ConfirmBookingPage extends React.Component {
         userID: this.state.userid,
         timeslotID: this.state.timeslotID,
         tableID: this.state.tableID,
+        userEmail: userEmail
       }),
       headers: { 'Content-Type': 'application/json' },
     }).then((response) => (response.status === 200 ? this.setState({ bookingDone: true }) : this.setState({ bookingError: true })));

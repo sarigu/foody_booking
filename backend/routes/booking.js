@@ -1,11 +1,11 @@
 const router = require('express').Router();
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
 let auth = false;
 let usertype = '';
 let userEmail = '';
-
 
 // ----------   MYSQL CONNECTION
 const con = mysql.createConnection({
@@ -16,16 +16,15 @@ const con = mysql.createConnection({
   port: '3306',
 });
 
-// ----------   backend middleware 
+// ----------  AUTH FUNCTIONS
+
+// backend middleware
 function isAuth(req, res, next) {
   if (auth !== true) {
     return res.status(401).json({ message: 'Not auth' });
   }
   next();
 }
-
-
-// ----------  AUTH FUNCTIONS
 
 // check if user is in db already
 function checkUser(email, res) {
@@ -38,14 +37,6 @@ function checkUser(email, res) {
       res.status(400).send({ message: 'User already exists' });
     }
   });
-}
-
-// backend middleware not in use
-function isAuth(req, res, next) {
-  if (auth !== true) {
-    return res.status(401).json({ message: 'Not auth' });
-  }
-  next();
 }
 
 // sign up an user
@@ -159,7 +150,6 @@ router.get('/auth/logout', (req, res) => {
   return res.status(200).send('success');
 });
 
-
 // ----------  Booking FUNCTIONS
 
 // ----------  Menu ----------
@@ -259,6 +249,33 @@ router.get('/staff', isAuth, (req, res) => {
   });
 });
 
+// ----------  Emails ----------
+
+function sendConfirmationMail(userEmail) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'sarigucki@gmail.com',
+      pass: 'password',
+    },
+  });
+
+  const mailOptions = {
+    from: 'sarigucki@gmail.com',
+    to: userEmail,
+    subject: 'Booking Confirmation',
+    text: 'You booked a table',
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(`Email sent: ${info.response}`);
+    }
+  });
+}
+
 // ----------  Booking ----------
 
 // get all Timeslots
@@ -323,11 +340,15 @@ function makeTableUnavailable(tableID) {
 
 // make booking (changed)
 router.post('/booking', isAuth, (req, res) => {
-  const { timeslotID, userID, tableID } = req.body;
+  const {
+    timeslotID, userID, tableID, userEmail,
+  } = req.body;
+  console.log(userEmail);
   const sql = 'INSERT INTO `booking` (`TimeSlotID`, `UserID`, `TableID`,`BookingStatus`) VALUES ( ? , ?, ?, 1)';
   con.query(sql, [timeslotID, userID, tableID], (err, result) => {
     if (err) throw err;
     makeTableUnavailable(tableID);
+    sendConfirmationMail(userEmail);
     res.send({ message: 'Booking Added' });
   });
 });
@@ -341,11 +362,11 @@ router.get('/bookings/', isAuth, (req, res) => {
     oldBookings = [];
     console.log(data);
     if (data.BookingStatus === 1) {
-      oldBookings.push(data)
+      oldBookings.push(data);
     } else {
-      activeBookings.push(data)
+      activeBookings.push(data);
     }
-    return res.send({ activeBookings: activeBookings, oldBookings: oldBookings });
+    return res.send({ activeBookings, oldBookings });
   });
 });
 
@@ -365,8 +386,6 @@ router.get('/bookings/:userid', isAuth, (req, res) => {
 // delete a booking
 router.get('/bookings/:id/:table', isAuth, (req, res) => {
   const { id, table } = req.params;
-  console.log(id);
-  console.log(table);
   const sql = 'DELETE FROM booking WHERE BookingID=?';
   con.query(sql, [id], (err, result) => {
     if (err) throw err;
