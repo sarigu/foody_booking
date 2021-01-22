@@ -381,12 +381,11 @@ router.get('/bookings/', isAuth, (req, res) => {
   });
 });
 
-
 // get all bookings by date
 router.get('/bookings/:date', isAuth, (req, res) => {
   const { date } = req.params;
   console.log(date);
-  const sql = 'SELECT * FROM booking INNER JOIN user ON user.id = booking.UserID INNER JOIN timeslot ON timeslot.TimeSlotID = booking.TimeSlotID INNER JOIN tables ON tables.TableID = booking.TableID WHERE tables.Date = ? '
+  const sql = 'SELECT * FROM booking INNER JOIN user ON user.id = booking.UserID INNER JOIN timeslot ON timeslot.TimeSlotID = booking.TimeSlotID INNER JOIN tables ON tables.TableID = booking.TableID WHERE tables.Date = ? ';
   con.query(sql, [date], (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
