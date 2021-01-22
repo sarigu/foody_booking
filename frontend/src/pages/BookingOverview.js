@@ -29,6 +29,19 @@ export default class BookingOverview extends React.Component {
     }
   }
 
+  handleDate = (e) => {
+    e.preventDefault();
+    const date = e.target.date.value;
+    fetch(`http://localhost:8000/bookings/${date}`)
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ activeBookings: data.activeBookings[0], oldBookings: data.oldBookings[0] });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
     return (
       <div>
@@ -37,6 +50,13 @@ export default class BookingOverview extends React.Component {
             <Navbar />
             <div className="main">
               <h1>Booking Overview &#128203;</h1>
+              <h2>Choose a date &#128198;</h2>
+              <form onSubmit={this.handleDate}>
+                <label htmlFor="text">Date</label>
+                <input type="date" id="date" name="date" placeholder="yyyy-mm-dd" />
+                <button type="submit">Go</button>
+              </form>
+              <br />
               <div className="flex">  <div id="old" className="bar-elem" onClick={this.handleBookingStatus}>Old</div>   <div id="active" className="bar-elem" onClick={this.handleBookingStatus}>Active</div></div>
               {this.state.status === 'active' ? (
                 <div>
@@ -56,7 +76,6 @@ export default class BookingOverview extends React.Component {
                   </div>
                 </div>
               ) : (<div>Choose if you want to see old or active bookings</div>)}
-
             </div>
           </div>
         )
