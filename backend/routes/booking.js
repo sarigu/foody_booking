@@ -2,6 +2,7 @@ const router = require('express').Router();
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 let auth = false;
 let usertype = '';
@@ -10,11 +11,11 @@ let userFirstName = '';
 
 // ----------   MYSQL CONNECTION
 const con = mysql.createConnection({
-  host: 'aws-foodyapp.cvolzzyzesis.us-east-1.rds.amazonaws.com',
-  user: 'admin',
-  password: 'AWSfoodyapp3',
-  database: 'Foody',
-  port: '3306',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  port: process.env.DB_PORT,
 });
 
 // ----------  AUTH FUNCTIONS
@@ -35,7 +36,7 @@ function checkUser(email, res) {
     const [user] = results;
     if (user) {
       console.log('user exists');
-      res.status(400).send({ message: 'User already exists' });
+      return res.status(400).send({ message: 'User already exists' });
     }
   });
 }
@@ -52,7 +53,7 @@ router.post('/auth/signup', async (req, res) => {
     const sql = 'INSERT INTO user (email, password, firstName, lastName) VALUES ( ?,  ?,  ?,  ?)';
     await con.query(sql, [email, hashedPassword, firstName, lastName], (err, result) => {
       if (result) {
-        res.status(200).send();
+        return res.status(200).send();
       }
     });
   } catch {
@@ -79,16 +80,16 @@ router.post('/auth/login', (req, res) => {
             usertype = user.usertype;
             userEmail = user.email;
             userFirstName = user.firstName;
-            res.status(200).send();
+            return res.status(200).send();
           }
         });
       } else {
         auth = false;
-        res.status(401).send({ error: 'User does not exist. Try again.' });
+        return res.status(401).send({ error: 'User does not exist. Try again.' });
       }
     });
   } else {
-    res.status(401).send({ error: 'Password and Email required.' });
+    return res.status(401).send({ error: 'Password and Email required.' });
   }
 });
 
@@ -97,6 +98,7 @@ router.post('/auth/create_staff_account', async (req, res) => {
   const {
     email, password, firstName, lastName,
   } = req.body;
+
   checkUser(email, res);
 
   try {
@@ -106,7 +108,7 @@ router.post('/auth/create_staff_account', async (req, res) => {
     const sql = 'INSERT INTO user (email, password, usertype, firstName, lastName) VALUES (  ?,  ?, "restaurant", ?, ?)';
     await con.query(sql, [email, hashedPassword, firstName, lastName], (err, result) => {
       if (result) {
-        res.status(200).send();
+        return res.status(200).send();
       }
     });
   } catch {
@@ -122,7 +124,7 @@ router.post('/auth/create_account', (req, res) => {
     con.query(sql, [email, firstName, lastName], (err, result) => {
       console.log(result.insertId);
       const userid = result.insertId;
-      res.send({ userid });
+      return res.send({ userid });
     });
   } catch {
     res.status(500).send();
@@ -136,18 +138,18 @@ router.post('/auth/user', (req, res) => {
   con.query(sql, [userEmail], (error, results) => {
     if (error) throw error;
     const [user] = results;
-    res.send(user);
+    return res.send(user);
   });
 });
 
 // check if user is logged in
 router.get('/auth/is_auth', (req, res) => {
   if (auth === true) {
-    res.send({
+    return res.send({
       auth: true, usertype, userEmail, userFirstName,
     });
   } else {
-    res.send({ auth: false });
+    return res.send({ auth: false });
   }
 });
 
@@ -181,7 +183,7 @@ router.post('/menu/items', isAuth, (req, res) => {
     const sql = 'INSERT INTO menu (Item, Price, Description, RestaurantID) VALUES ( ?,  ?,  ?, ?)';
     con.query(sql, [req.body.menuItem, req.body.price, req.body.description, 1], (err, result) => {
       if (result) {
-        res.status(200).send();
+        return res.status(200).send();
       }
     });
   } catch {
@@ -212,7 +214,7 @@ router.get('/menu/item/:id', isAuth, (req, res) => {
   con.query(sql, [id], (err, result) => {
     if (result) {
       console.log('delete');
-      res.status(200).send();
+      return res.status(200).send();
     }
   });
 });
@@ -298,7 +300,7 @@ router.get('/timeslots', isAuth, (req, res) => {
       data = JSON.parse(JSON.stringify(result));
       return res.send(data);
     }
-    res.send({ message: 'no entries' });
+    return res.send({ message: 'no entries' });
   });
 });
 
@@ -313,7 +315,7 @@ router.get('/tables/:groupsize/:timeslotID/:date', isAuth, (req, res) => {
       data = JSON.parse(JSON.stringify(result));
       return res.send(data);
     }
-    res.send({ message: 'no entries' });
+    return res.send({ message: 'no entries' });
   });
 });
 
@@ -328,7 +330,7 @@ router.get('/tables/:timeslotID/:date', isAuth, (req, res) => {
       data = JSON.parse(JSON.stringify(result));
       return res.send(data);
     }
-    res.send({ message: 'no entries' });
+    return res.send({ message: 'no entries' });
   });
 });
 
@@ -360,7 +362,8 @@ router.post('/booking', isAuth, (req, res) => {
     if (err) throw err;
     makeTableUnavailable(tableID);
     sendConfirmationMail(userEmail);
-    res.status(200).send({ message: 'Booking Added' });
+    console.log(result);
+    return res.status(200).send({ message: 'Booking Added' });
   });
 });
 
