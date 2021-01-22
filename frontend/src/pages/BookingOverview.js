@@ -62,9 +62,12 @@ export default class BookingOverview extends React.Component {
               {this.state.status === 'active' ? (
                 <div>
                   <h2>Active</h2>
-                  <div>     {this.state.activeBookings ? this.state.activeBookings.map((booking, index) => (
-                    <Booking key={`booking${index}`} item={booking} />
-                  )) : (<div> No active Bookings </div>)}
+                  <div>
+                    {this.state.activeBookings ? this.state.activeBookings.map((booking, index) => (
+                      <div>
+                        <Booking key={`booking${index}`} item={booking} />
+                      </div>
+                    )) : (<div> No active Bookings </div>)}
                   </div>
                 </div>
               ) : this.state.status === 'old' ? (

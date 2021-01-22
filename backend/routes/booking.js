@@ -364,24 +364,6 @@ router.post('/booking', isAuth, (req, res) => {
   });
 });
 
-// get all bookings
-router.get('/bookings/', isAuth, (req, res) => {
-  con.query('SELECT * FROM booking INNER JOIN user ON user.id = booking.UserID INNER JOIN timeslot ON timeslot.TimeSlotID = booking.TimeSlotID INNER JOIN tables ON tables.TableID = booking.TableID', (err, result) => {
-    if (err) throw err;
-    data = JSON.parse(JSON.stringify(result));
-    activeBookings = [];
-    oldBookings = [];
-    console.log(data);
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].BookingStatus === 0) {
-        oldBookings.push(data[i]);
-      } else {
-        activeBookings.push(data[i]);
-      }
-    }
-    return res.send({ activeBookings, oldBookings });
-  });
-});
 
 // get all bookings by date
 router.get('/bookings/:date', isAuth, (req, res) => {
@@ -405,7 +387,7 @@ router.get('/bookings/:date', isAuth, (req, res) => {
 });
 
 // get bookings for a certain user
-router.get('/bookings/:userid', isAuth, (req, res) => {
+router.get('/cancel_bookings/:userid', isAuth, (req, res) => {
   console.log('bookings');
   const { userid } = req.params;
   console.log(userid);
@@ -413,6 +395,7 @@ router.get('/bookings/:userid', isAuth, (req, res) => {
   con.query(sql, [userid], (err, result) => {
     if (err) throw err;
     data = JSON.parse(JSON.stringify(result));
+    console.log(data);
     return res.send({ data });
   });
 });
@@ -428,6 +411,25 @@ router.get('/bookings/:id/:table', isAuth, (req, res) => {
       makeTableAvailable(table);
       return res.status(200).send();
     }
+  });
+});
+
+// get all bookings
+router.get('/bookings/', isAuth, (req, res) => {
+  con.query('SELECT * FROM booking INNER JOIN user ON user.id = booking.UserID INNER JOIN timeslot ON timeslot.TimeSlotID = booking.TimeSlotID INNER JOIN tables ON tables.TableID = booking.TableID', (err, result) => {
+    if (err) throw err;
+    data = JSON.parse(JSON.stringify(result));
+    activeBookings = [];
+    oldBookings = [];
+    console.log(data);
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].BookingStatus === 0) {
+        oldBookings.push(data[i]);
+      } else {
+        activeBookings.push(data[i]);
+      }
+    }
+    return res.send({ activeBookings, oldBookings });
   });
 });
 

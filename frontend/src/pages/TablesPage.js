@@ -51,9 +51,9 @@ export default class TablesPage extends React.Component {
         <Navbar />
         <div className="main">
           <div>
-            <Link to="/booking/date">Date</Link>
-            <Link to="/booking/time">Timeslot</Link>
-            <Link to="/booking/groupsize">Group Size</Link>
+            <Link className="bar-elem" to="/booking/date">Date</Link>
+            <Link className="bar-elem" to="/booking/time">Timeslot</Link>
+            <Link className="bar-elem" to="/booking/groupsize">Group Size</Link>
           </div>
           <div>
             <h2>Available Tables</h2>

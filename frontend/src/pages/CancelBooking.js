@@ -27,7 +27,8 @@ export default class CancelBooking extends React.Component {
   }
 
   getBookings(userid) {
-    fetch(`http://localhost:8000/bookings/${userid}`)
+    console.log('get bookings');
+    fetch(`http://localhost:8000/cancel_bookings/${userid}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -46,9 +47,13 @@ export default class CancelBooking extends React.Component {
             <Navbar />
             <div className="main">
               <h1>Cancel a booking</h1>
-              {this.state.bookings && this.state.bookings.map((booking, index) => (
-                <Booking key={`booking${index}`} item={booking} />
-              ))}
+              <div>
+                {this.state.bookings ? this.state.bookings.map((booking, index) => (
+                  <div>
+                    <Booking key={`booking${index}`} item={booking} />
+                  </div>
+                )) : (<div> No active Bookings </div>)}
+              </div>
             </div>
           </div>
         )
