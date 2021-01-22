@@ -13,7 +13,7 @@ export default class BookingOverview extends React.Component {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        this.setState({ activeBookings: data.activeBookings[0], oldBookings: data.oldBookings[0] });
+        this.setState({ activeBookings: data.activeBookings, oldBookings: data.oldBookings });
       })
       .catch((err) => {
         console.log(err);
@@ -35,7 +35,8 @@ export default class BookingOverview extends React.Component {
     fetch(`http://localhost:8000/bookings/${date}`)
       .then((res) => res.json())
       .then((data) => {
-        this.setState({ activeBookings: data.activeBookings[0], oldBookings: data.oldBookings[0] });
+        console.log(data);
+        this.setState({ activeBookings: data.activeBookings, oldBookings: data.oldBookings });
       })
       .catch((err) => {
         console.log(err);

@@ -372,10 +372,12 @@ router.get('/bookings/', isAuth, (req, res) => {
     activeBookings = [];
     oldBookings = [];
     console.log(data);
-    if (data.BookingStatus === 1) {
-      oldBookings.push(data);
-    } else {
-      activeBookings.push(data);
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].BookingStatus === 0) {
+        oldBookings.push(data[i]);
+      } else {
+        activeBookings.push(data[i]);
+      }
     }
     return res.send({ activeBookings, oldBookings });
   });
@@ -391,11 +393,12 @@ router.get('/bookings/:date', isAuth, (req, res) => {
     data = JSON.parse(JSON.stringify(result));
     activeBookings = [];
     oldBookings = [];
-    console.log(data);
-    if (data.BookingStatus === 1) {
-      oldBookings.push(data);
-    } else {
-      activeBookings.push(data);
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].BookingStatus === 0) {
+        oldBookings.push(data[i]);
+      } else {
+        activeBookings.push(data[i]);
+      }
     }
     return res.send({ activeBookings, oldBookings });
   });
