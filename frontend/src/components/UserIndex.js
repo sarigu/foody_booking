@@ -15,14 +15,14 @@ export default class UserIndex extends Component {
     return (
       <div>
         <div className="flex">
-          <h1 className="welcome-heading">Hello User {this.state.userFirstName}</h1>
+          <h1 className="welcome-heading">Hello, {this.state.userFirstName}</h1>
           <span className="emojis">&#128522;</span>
-          <span className="emojis">&#9995;</span>
+          <span className="emojis">&#128075;</span>
         </div>
         <div className="index-container">
           <div className="booking-container">
             <div className="flex">
-              <h2>Do you want to book a table? </h2>
+              <h2>Want to book a table? </h2>
               <span className="emojis">&#127869;</span>
             </div>
             <Link to="/booking/date" className="link-elem">Find vacant tables</Link>

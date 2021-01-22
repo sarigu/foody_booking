@@ -45,7 +45,7 @@ export default class Menu extends React.Component {
           <div>
             <Navbar />
             <div className="main">
-              <h1>See current staff</h1>
+              <h1>See current staff &#127882;</h1>
               {this.state.staff ? this.state.staff.map((item, index) => (
                 <Staff key={`staff${index}`} item={item} />
               )) : (<div> No Staff </div>)}

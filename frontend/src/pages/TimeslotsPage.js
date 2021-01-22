@@ -27,9 +27,9 @@ export default class TimeslotsPage extends React.Component {
         <Navbar />
         <div className="main">
           <div>
-            <Link to="/booking/date">Date</Link>
+            <Link className="bar-elem" to="/booking/date">Date</Link>
           </div>
-          <h2>Choose a time</h2>
+          <h2>Choose a time &#128338;</h2>
           <div>
             {this.state.timeslots && this.state.timeslots.map((timeslot, index) => (
               <Timeslot key={`timeslot${index}`} item={timeslot} />

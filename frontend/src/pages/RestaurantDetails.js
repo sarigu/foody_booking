@@ -30,7 +30,7 @@ export default class RestaurantDetails extends React.Component {
           <div>
             <Navbar />
             <div className="main">
-              <h1>Restaurant Details</h1>
+              <h1>Restaurant Details &#128227;</h1>
               <div>
                 <div>
                   <span className="boldText">Name:</span>
@@ -53,7 +53,7 @@ export default class RestaurantDetails extends React.Component {
                   {Phone}
                 </div>
               </div>
-              <Link to="/updatedetails">Edit</Link>
+              <Link className="link-elem" to="/updatedetails">Edit</Link>
             </div>
           </div>
         )

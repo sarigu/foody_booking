@@ -52,11 +52,6 @@ class App extends React.Component {
           <div>
             <Switch>
               <Route path="/" exact>
-                <div className="flex">
-                  <h1 className="welcome-heading">Hello You</h1>
-                  <span className="emojis">&#128522;</span>
-                  <span className="emojis">&#9995;</span>
-                </div>
                 <Login />
               </Route>
               <Route path="/signup" exact>

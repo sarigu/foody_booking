@@ -16,7 +16,7 @@ export default class DatePage extends Component {
           <div>
             <Navbar />
             <div className="main">
-              <h2>Choose a date</h2>
+              <h2>Choose a date &#128198;</h2>
               <form onSubmit={this.handleDate}>
                 <label htmlFor="text">Date</label>
                 <input type="date" id="date" name="date" placeholder="yyyy-mm-dd" />

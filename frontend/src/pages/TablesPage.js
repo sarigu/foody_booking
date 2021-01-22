@@ -57,9 +57,9 @@ export default class TablesPage extends React.Component {
           </div>
           <div>
             <h2>Available Tables</h2>
-            <div>For {this.state.groupsize} people</div>
-            <div>On  {this.state.date} </div>
-            <div>Between {this.state.startTime} and {this.state.endTime}  </div>
+            <div><span className="boldText">For</span> {this.state.groupsize} people</div>
+            <div><span className="boldText">On</span> {this.state.date} </div>
+            <div><span className="boldText">Between</span> {this.state.startTime} <span className="boldText">and</span> {this.state.endTime}  </div>
             <div>
               {this.state.tables ? this.state.tables.map((table, index) => (
                 <div>

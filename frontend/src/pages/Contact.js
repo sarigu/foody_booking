@@ -35,18 +35,22 @@ export default class RestaurantDetails extends React.Component {
                   <span className="boldText">Name: </span>
                   {Name}
                 </div>
+                <br />
                 <div>
                   <span className="boldText">Address: </span>
                   {Address}
                 </div>
+                <br />
                 <div>
                   <span className="boldText">Description: </span>
                   {Description}
                 </div>
+                <br />
                 <div>
                   <span className="boldText">Email: </span>
                   {Email}
                 </div>
+                <br />
                 <div>
                   <span className="boldText">Phone: </span>
                   {Phone}

@@ -46,7 +46,7 @@ export default class RestaurantForm extends React.Component {
           <div>
             <Navbar />
             <div className="main">
-              <h1>Restaurant Details</h1>
+              <h1>Restaurant Details &#128227;</h1>
               <form id="retaurantForm" method="POST" onSubmit={this.handleDetailsUpdate}>
                 <label htmlFor="name">Name</label>
                 <input name="name" id="name" type="text" defaultValue={Name} />

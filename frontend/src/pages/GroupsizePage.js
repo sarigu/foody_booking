@@ -16,8 +16,8 @@ export default class GroupsizePage extends Component {
         <Navbar />
         <div className="main">
           <div>
-            <Link to="/booking/date">Date</Link>
-            <Link to="/booking/time">Timeslot</Link>
+            <Link className="bar-elem" to="/booking/date">Date</Link>
+            <Link className="bar-elem" to="/booking/time">Timeslot</Link>
           </div>
           <h2>How many people are in your party?</h2>
           <form onSubmit={this.handleGroupSize}>

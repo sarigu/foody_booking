@@ -36,8 +36,8 @@ export default class BookingOverview extends React.Component {
           <div>
             <Navbar />
             <div className="main">
-              <h1>Booking Overview</h1>
-              <div>  <div id="old" onClick={this.handleBookingStatus}>Old</div>   <div id="active" onClick={this.handleBookingStatus}>Active</div></div>
+              <h1>Booking Overview &#128203;</h1>
+              <div className="flex">  <div id="old" className="bar-elem" onClick={this.handleBookingStatus}>Old</div>   <div id="active" className="bar-elem" onClick={this.handleBookingStatus}>Active</div></div>
               {this.state.status === 'active' ? (
                 <div>
                   <h2>Active</h2>

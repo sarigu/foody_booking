@@ -23,9 +23,16 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        <h1>Login</h1>
-        <LoginForm onLogin={this.handleLogin} />
-        <Link to="/signup">Create an account here</Link>
+        <div className="main">
+          <div className="flex">
+            <h1 className="welcome-heading">Hello You</h1>
+            <span className="emojis">&#128522;</span>
+            <span className="emojis">&#128075;</span>
+          </div>
+          <h1>Login</h1>
+          <LoginForm onLogin={this.handleLogin} />
+          <Link className="link-elem" to="/signup">Create an account here</Link>
+        </div>
       </div>
     );
   }

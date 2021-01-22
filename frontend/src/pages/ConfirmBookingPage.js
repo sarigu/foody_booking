@@ -18,8 +18,6 @@ export default class ConfirmBookingPage extends React.Component {
     const userEmail = localStorage.getItem('userEmail');
     const userFirstName = localStorage.getItem('userFirstName');
 
-    console.log(userEmail);
-
     // get user
     await fetch('http://localhost:8000/auth/user', {
       method: 'POST',
@@ -59,10 +57,10 @@ export default class ConfirmBookingPage extends React.Component {
         <Navbar />
         <div className="main">
           <div>
-            <Link to="/booking/date">Date</Link>
-            <Link to="/booking/time">Timeslot</Link>
-            <Link to="/booking/groupsize">Group Size</Link>
-            <Link to="/booking/tables">Tables</Link>
+            <Link className="bar-elem" to="/booking/date">Date</Link>
+            <Link className="bar-elem" to="/booking/time">Timeslot</Link>
+            <Link className="bar-elem" to="/booking/groupsize">Group Size</Link>
+            <Link className="bar-elem" to="/booking/tables">Tables</Link>
           </div>
           <div>
             <h2>Confirm Booking</h2>
@@ -71,12 +69,12 @@ export default class ConfirmBookingPage extends React.Component {
             {this.state.bookingDone === true ? (<div>You booked a table! <br /> We will send you an email shortly</div>)
               : (
                 <div>
-                  <div>Booking on the name {this.state.userFirstName}</div>
-                  <div>People: {this.state.groupsize}</div>
-                  <div>Time: {this.state.startTime} to {this.state.endTime}</div>
-                  <div>Date: {this.state.date}</div>
-                  <div>Table: {this.state.tableID}</div>
-                  <div>Will be send to: {this.state.email}</div>
+                  <div> <span className="boldText">Booking on the name </span>{this.state.userFirstName}</div>
+                  <div> <span className="boldText">Number of People: </span>{this.state.groupsize}</div>
+                  <div><span className="boldText">Time: </span>{this.state.startTime} to {this.state.endTime}</div>
+                  <div> <span className="boldText">Date: </span>{this.state.date}</div>
+                  <div> <span className="boldText">Table: </span>{this.state.tableID}</div>
+                  <div> <span className="boldText">Will be send to: </span>{this.state.email}</div>
                   <button onClick={this.handleBooking}>Make the booking</button>
                 </div>
               )}

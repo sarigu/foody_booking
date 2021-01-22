@@ -5,9 +5,9 @@ export default class MenuItem extends Component {
     const { Item, Price, Description } = this.props.item;
 
     return (
-      <div>
+      <div className="menu-item">
         <div>
-          <h2>{Item}</h2>
+          <h3>{Item}</h3>
         </div>
         <div>
           <span className="boldText">Price: </span>

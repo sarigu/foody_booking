@@ -24,9 +24,11 @@ export default class SignUp extends Component {
   render() {
     return (
       <div>
-        <h1>Sign Up</h1>
-        <SignUpForm onCreateAccount={this.handleSignUp} />
-        <Link to="/">Already have an account? Log in</Link>
+        <div className="main">
+          <h1>Sign Up to F&#127833;&#127833;dy </h1>
+          <SignUpForm onCreateAccount={this.handleSignUp} />
+          <Link className="link-elem" to="/">Already have an account? Log in</Link>
+        </div>
       </div>
     );
   }

@@ -49,9 +49,18 @@ nav{
 
 .link-elem{
   font-weight: bold;
-  font-size:21px;
+  font-size:19px;
   text-decoration: none;
   color:black;
+}
+
+.bar-elem{
+  font-weight: bold;
+  font-size:15px;
+  text-decoration: none;
+  color:black;
+  padding-right:10px;
+  cursor: pointer;
 }
 
 .index-container{
@@ -68,6 +77,7 @@ nav{
 form{
   display:flex;
   flex-direction: column;
+  margin-bottom:20px;
 }
 
 input{
@@ -100,4 +110,9 @@ button{
   padding:10px;
   border-radius: 5px;
   border:none;
+  margin-top:10px;
+}
+
+.menu-item{
+  padding-bottom:20px;
 }

@@ -42,11 +42,11 @@ export default class ConfirmByRestaurant extends React.Component {
         <Navbar />
         <div className="main">
           <div>
-            <Link to="/booking/date">Date</Link>
-            <Link to="/booking/time">Timeslot</Link>
-            <Link to="/booking/groupsize">Group Size</Link>
-            <Link to="/booking/tables">Tables</Link>
-            <Link to="/booking/restaurant_add">Customer Info</Link>
+            <Link className="bar-elem" to="/booking/date">Date</Link>
+            <Link className="bar-elem" to="/booking/time">Timeslot</Link>
+            <Link className="bar-elem" to="/booking/groupsize">Group Size</Link>
+            <Link className="bar-elem" to="/booking/tables">Tables</Link>
+            <Link className="bar-elem" to="/booking/restaurant_add">Customer Info</Link>
           </div>
           <div>
             <h2>Confirm booking in behalf of customer</h2>
