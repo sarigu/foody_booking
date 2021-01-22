@@ -10,7 +10,6 @@ export default class CancelBooking extends React.Component {
 
   componentDidMount = () => {
     const userEmail = localStorage.getItem('userEmail');
-    console.log(userEmail);
     // get user
     fetch('http://localhost:8000/auth/user', {
       method: 'POST',

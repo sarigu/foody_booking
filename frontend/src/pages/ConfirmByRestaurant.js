@@ -15,40 +15,22 @@ export default class ConfirmByRestaurant extends React.Component {
     const tableID = localStorage.getItem('tableID');
     const startTime = localStorage.getItem('timeslotStart');
     const endTime = localStorage.getItem('timeslotEnd');
+    const customerid = localStorage.getItem('customerid');
+    const customeremail = localStorage.getItem('customeremail');
+    const customername = localStorage.getItem('customername');
     this.setState({
-      groupsize: groupsize, date: date, tableID: tableID, timeslotID: timeslotID, startTime: startTime, endTime: endTime,
+      groupsize: groupsize, date: date, tableID: tableID, timeslotID: timeslotID, startTime: startTime, endTime: endTime, customerid: customerid, customeremail: customeremail, customername: customername,
     });
   }
 
-  handleAddedData = async (e) => {
-    e.preventDefault();
-    const { username, email } = e.target;
-
-    await fetch('http://localhost:8000/auth/create_account', {
-      method: 'POST',
-      body: JSON.stringify({
-        username: username.value,
-        email: email.value,
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    }).then((res) => res.json())
-      .then((data) => {
-        console.log(data.userid);
-        this.handleBooking(data.userid, email);
-      });
-  }
-
-  handleBooking = (userid, userEmail) => {
-    console.log('make booking');
-    console.log(userid);
-
+  handleBooking = () => {
     fetch('http://localhost:8000/booking', {
       method: 'POST',
       body: JSON.stringify({
-        userID: userid,
+        userID: this.state.customerid,
         timeslotID: this.state.timeslotID,
         tableID: this.state.tableID,
-        userEmail: userEmail
+        userEmail: this.state.customeremail,
       }),
       headers: { 'Content-Type': 'application/json' },
     }).then((response) => (response.status === 200 ? this.setState({ bookingDone: true }) : this.setState({ bookingError: true })));
@@ -64,6 +46,7 @@ export default class ConfirmByRestaurant extends React.Component {
             <Link to="/booking/time">Timeslot</Link>
             <Link to="/booking/groupsize">Group Size</Link>
             <Link to="/booking/tables">Tables</Link>
+            <Link to="/booking/restaurant_add">Customer Info</Link>
           </div>
           <div>
             <h2>Confirm booking in behalf of customer</h2>
@@ -72,17 +55,12 @@ export default class ConfirmByRestaurant extends React.Component {
             {this.state.bookingDone === true ? (<div>You booked a table in behalf of a customer! <br /> We will send the customer an email shortly to</div>)
               : (
                 <div>
+                  <div>In behalf of: {this.state.customername} </div>
                   <div>People: {this.state.groupsize}</div>
                   <div>Time: {this.state.startTime} to {this.state.endTime}</div>
                   <div>Date: {this.state.date}</div>
                   <div>Table: {this.state.tableID}</div>
-                  <form onSubmit={this.handleAddedData}>
-                    <label htmlFor="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="username" />
-                    <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="email" />
-                    <button type="submit">Update</button>
-                  </form>
+                  <button onClick={this.handleBooking}>Confirm</button>
                 </div>
               )}
           </div>

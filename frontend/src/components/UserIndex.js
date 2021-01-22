@@ -2,11 +2,20 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 export default class UserIndex extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  componentDidMount = () => {
+    this.setState({ userFirstName: localStorage.getItem('userFirstName') });
+  }
+
   render() {
     return (
       <div>
         <div className="flex">
-          <h1 className="welcome-heading">Hello User</h1>
+          <h1 className="welcome-heading">Hello User {this.state.userFirstName}</h1>
           <span className="emojis">&#128522;</span>
           <span className="emojis">&#9995;</span>
         </div>

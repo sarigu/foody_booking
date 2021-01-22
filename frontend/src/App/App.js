@@ -20,6 +20,7 @@ import StaffPage from '../pages/StaffPage';
 import CancelBooking from '../pages/CancelBooking';
 import ConfirmByRestaurant from '../pages/ConfirmByRestaurant';
 import AddTables from '../pages/AddTables';
+import RestaurantAddUser from '../pages/RestaurantAddUser';
 
 class App extends React.Component {
   constructor() {
@@ -36,6 +37,7 @@ class App extends React.Component {
         console.log(data);
         localStorage.setItem('userEmail', data.userEmail);
         localStorage.setItem('usertype', data.usertype);
+        localStorage.setItem('userFirstName', data.userFirstName);
         this.setState({ auth: data.auth, usertype: data.usertype });
       })
       .catch((err) => {
@@ -111,6 +113,10 @@ class App extends React.Component {
               <Route path="/edit_tables" exact>
                 <AddTables isAuth={this.state.auth} usertype={this.state.usertype} />
               </Route>
+              <Route path="/booking/restaurant_add" exact>
+                <RestaurantAddUser isAuth={this.state.auth} usertype={this.state.usertype} />
+              </Route>
+
             </Switch>
           </div>
         </Router>

@@ -16,6 +16,7 @@ export default class ConfirmBookingPage extends React.Component {
     const startTime = localStorage.getItem('timeslotStart');
     const endTime = localStorage.getItem('timeslotEnd');
     const userEmail = localStorage.getItem('userEmail');
+    const userFirstName = localStorage.getItem('userFirstName');
 
     console.log(userEmail);
 
@@ -30,7 +31,7 @@ export default class ConfirmBookingPage extends React.Component {
       .then((data) => {
         console.log(data);
         this.setState({
-          groupsize: groupsize, date: date, tableID: tableID, timeslotID: timeslotID, startTime: startTime, endTime: endTime, userid: data.id, username: data.username, email: data.email,
+          groupsize: groupsize, date: date, tableID: tableID, timeslotID: timeslotID, startTime: startTime, endTime: endTime, userid: data.id, email: data.email, userFirstName: userFirstName,
         });
       })
       .catch((err) => {
@@ -46,7 +47,7 @@ export default class ConfirmBookingPage extends React.Component {
         userID: this.state.userid,
         timeslotID: this.state.timeslotID,
         tableID: this.state.tableID,
-        userEmail: userEmail
+        userEmail: this.state.email,
       }),
       headers: { 'Content-Type': 'application/json' },
     }).then((response) => (response.status === 200 ? this.setState({ bookingDone: true }) : this.setState({ bookingError: true })));
@@ -70,7 +71,7 @@ export default class ConfirmBookingPage extends React.Component {
             {this.state.bookingDone === true ? (<div>You booked a table! <br /> We will send you an email shortly</div>)
               : (
                 <div>
-                  <div>Booking for {this.state.username}</div>
+                  <div>Booking on the name {this.state.userFirstName}</div>
                   <div>People: {this.state.groupsize}</div>
                   <div>Time: {this.state.startTime} to {this.state.endTime}</div>
                   <div>Date: {this.state.date}</div>

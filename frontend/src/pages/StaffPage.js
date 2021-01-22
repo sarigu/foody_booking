@@ -22,14 +22,17 @@ export default class Menu extends React.Component {
   handleNewStaff = async (e) => {
     e.preventDefault();
     console.log(e.target);
-    const { username, email, password } = e.target;
+    const {
+      email, password, firstName, lastName,
+    } = e.target;
 
     await fetch('http://localhost:8000/auth/create_staff_account', {
       method: 'POST',
       body: JSON.stringify({
-        username: username.value,
         email: email.value,
         password: password.value,
+        firstName: firstName.value,
+        lastName: lastName.value,
       }),
       headers: { 'Content-Type': 'application/json' },
     }).then((response) => (response.status === 200 ? window.location = '/staff' : console.log('error')));
@@ -49,8 +52,10 @@ export default class Menu extends React.Component {
               <div>
                 <h1>Add staff</h1>
                 <form onSubmit={this.handleNewStaff}>
-                  <label htmlFor="username">Username</label>
-                  <input type="text" id="username" name="username" placeholder="username" />
+                  <label htmlFor="firstName">First Name</label>
+                  <input required type="text" id="firstName" name="firstName" placeholder="first name" />
+                  <label htmlFor="lastName">Last Name</label>
+                  <input required type="text" id="lastName" name="lastName" placeholder="last name" />
                   <label htmlFor="email">Email</label>
                   <input type="email" id="email" name="email" placeholder="email" />
                   <label htmlFor="password">Temporary Password</label>

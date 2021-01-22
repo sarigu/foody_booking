@@ -38,11 +38,10 @@ export default class TablesPage extends React.Component {
     const tableID = e.target.id;
     localStorage.setItem('tableID', tableID);
     const usertype = localStorage.getItem('usertype');
-    console.log(usertype);
     if (usertype === 'user') {
       window.location = '/booking/confirm';
     } else {
-      window.location = '/booking/restaurant_confirm';
+      window.location = '/booking/restaurant_add';
     }
   }
 

@@ -13,7 +13,7 @@ export default class Booking extends Component {
 
   render() {
     const {
-      BookingID, username, email, Date, StartTime, EndTime, Capacity, TableID,
+      BookingID, email, Date, StartTime, EndTime, Capacity, TableID, firstName, lastName,
     } = this.props.item;
     return (
       <div>
@@ -21,7 +21,7 @@ export default class Booking extends Component {
         <div>
           <div>
             <span className="boldText">For: </span>
-            {username}
+            {firstName} {lastName}
           </div>
           <div>
             <span className="boldText">Email: </span>

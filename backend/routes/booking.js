@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 let auth = false;
 let usertype = '';
 let userEmail = '';
+let userFirstName = '';
 
 // ----------   MYSQL CONNECTION
 const con = mysql.createConnection({
@@ -41,12 +42,15 @@ function checkUser(email, res) {
 
 // sign up an user
 router.post('/auth/signup', async (req, res) => {
-  checkUser(req.body.email, res);
+  const {
+    email, password, firstName, lastName,
+  } = req.body;
+  checkUser(email, res);
   try {
     const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    const sql = 'INSERT INTO user (email, password, username) VALUES ( ?,  ?,  ?)';
-    await con.query(sql, [req.body.email, hashedPassword, req.body.username], (err, result) => {
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const sql = 'INSERT INTO user (email, password, firstName, lastName) VALUES ( ?,  ?,  ?,  ?)';
+    await con.query(sql, [email, hashedPassword, firstName, lastName], (err, result) => {
       if (result) {
         res.status(200).send();
       }
@@ -74,6 +78,7 @@ router.post('/auth/login', (req, res) => {
             auth = true;
             usertype = user.usertype;
             userEmail = user.email;
+            userFirstName = user.firstName;
             res.status(200).send();
           }
         });
@@ -89,15 +94,17 @@ router.post('/auth/login', (req, res) => {
 
 // create staff account
 router.post('/auth/create_staff_account', async (req, res) => {
-  console.log(req.body);
-  checkUser(req.body.email, res);
+  const {
+    email, password, firstName, lastName,
+  } = req.body;
+  checkUser(email, res);
 
   try {
     const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    const sql = 'INSERT INTO user (email, password, username, usertype) VALUES ( ?,  ?,  ?, "restaurant")';
-    await con.query(sql, [req.body.email, hashedPassword, req.body.username], (err, result) => {
+    const sql = 'INSERT INTO user (email, password, usertype, firstName, lastName) VALUES (  ?,  ?, "restaurant", ?, ?)';
+    await con.query(sql, [email, hashedPassword, firstName, lastName], (err, result) => {
       if (result) {
         res.status(200).send();
       }
@@ -109,9 +116,10 @@ router.post('/auth/create_staff_account', async (req, res) => {
 
 // create account to make booking in behalf of customer (not account customer can use actually)
 router.post('/auth/create_account', (req, res) => {
+  const { email, firstName, lastName } = req.body;
   try {
-    const sql = 'INSERT INTO user (email, password, username, usertype) VALUES ( ?, null , ?, "user")';
-    con.query(sql, [req.body.email, req.body.username], (err, result) => {
+    const sql = 'INSERT INTO user (email, password, usertype, firstName, lastName) VALUES ( ?, null, "user", ?, ?)';
+    con.query(sql, [email, firstName, lastName], (err, result) => {
       console.log(result.insertId);
       const userid = result.insertId;
       res.send({ userid });
@@ -135,7 +143,9 @@ router.post('/auth/user', (req, res) => {
 // check if user is logged in
 router.get('/auth/is_auth', (req, res) => {
   if (auth === true) {
-    res.send({ auth: true, usertype, userEmail });
+    res.send({
+      auth: true, usertype, userEmail, userFirstName,
+    });
   } else {
     res.send({ auth: false });
   }
@@ -147,6 +157,7 @@ router.get('/auth/logout', (req, res) => {
   auth = false;
   usertype = '';
   userEmail = '';
+  userFirstName = '';
   return res.status(200).send('success');
 });
 
@@ -252,6 +263,7 @@ router.get('/staff', isAuth, (req, res) => {
 // ----------  Emails ----------
 
 function sendConfirmationMail(userEmail) {
+  console.log('send email');
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -343,13 +355,12 @@ router.post('/booking', isAuth, (req, res) => {
   const {
     timeslotID, userID, tableID, userEmail,
   } = req.body;
-  console.log(userEmail);
   const sql = 'INSERT INTO `booking` (`TimeSlotID`, `UserID`, `TableID`,`BookingStatus`) VALUES ( ? , ?, ?, 1)';
   con.query(sql, [timeslotID, userID, tableID], (err, result) => {
     if (err) throw err;
     makeTableUnavailable(tableID);
     sendConfirmationMail(userEmail);
-    res.send({ message: 'Booking Added' });
+    res.status(200).send({ message: 'Booking Added' });
   });
 });
 

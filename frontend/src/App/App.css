@@ -4,7 +4,6 @@
   height:100vh;
   overflow: scroll;
   margin: 0;
-
 }
 
 .main{
@@ -71,6 +70,12 @@ form{
   flex-direction: column;
 }
 
+input{
+  border-radius: 5px;
+  border:none;
+  padding:5px;
+}
+
 footer{
   float:right;
   padding:70px;
@@ -87,4 +92,12 @@ a{
 
 .reservedTable{
   color: grey;
+}
+
+button{
+  background-color: rgba(255, 255, 255, 0.452);
+  color: black;
+  padding:10px;
+  border-radius: 5px;
+  border:none;
 }
